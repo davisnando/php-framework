@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond $1 !^__init__\.php
+RewriteRule ^(.*)$ __init__.php?path=$1 [L,QSA]
