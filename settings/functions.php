@@ -1,7 +1,6 @@
 <?php
 $templates = array();
 $static = array();
-
 /**
     load static files in
 **/

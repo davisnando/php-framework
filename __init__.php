@@ -1,11 +1,11 @@
 <?php
-require_once("settings/config.php");
-require_once("settings/model.php");
-require_once("settings/functions.php");
 if(strtolower(DEBUG) == "true"){
-    ini_set('display_errors', 'On');
-    error_reporting(E_ALL | E_STRICT);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 }
+require_once("settings/config.php");
+require_once("settings/functions.php");
 $var = $_GET['path'];
 RunFunc("settings/urls.php", $var);
 function RunFunc($urlfile,$path,$oldpath=null){
