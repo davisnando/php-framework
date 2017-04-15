@@ -95,3 +95,18 @@ function GetTemplate($keyname,$filename = null){
         return ;
     }
 }
+function getFileMimeType($file) {
+    $images = ['gif','jpg','jpeg','png'];
+    $stylesheets = ['css'];
+    $javascript = ['js'];
+    $array = explode('.',$file);
+    $extension = end($array);
+    if(in_array($extension,$images)){
+        return "image/".$extension;
+    }else if(in_array($extension,$stylesheets)){
+        return "text/".$extension;
+    }else if(in_array($extension,$javascript)){
+        return "application/javascript";
+    }
+    return $type;
+}

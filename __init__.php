@@ -8,6 +8,7 @@ require_once("settings/config.php");
 require_once("settings/functions.php");
 $var = $_GET['path'];
 RunFunc("settings/urls.php", $var);
+
 function RunFunc($urlfile,$path,$oldpath=null){
     require($urlfile);
     if($path != ""){
@@ -69,7 +70,15 @@ function RunFunc($urlfile,$path,$oldpath=null){
             RunFunc($urlfile,$keyname,$oldpath);
             return;
         }else{
-            http_response_code(404);
+            $oldpath = $_GET['path'];
+            if(file_exists($oldpath) && preg_match('/static/',$oldpath)){
+                $type = getFileMimeType($oldpath);
+                echo $type;
+                header('Content-Type: '.$type);
+                require($oldpath);
+            }else{
+                http_response_code(404);
+            }
         }
     }
 }
