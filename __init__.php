@@ -71,11 +71,14 @@ function RunFunc($urlfile,$path,$oldpath=null){
             return;
         }else{
             $oldpath = $_GET['path'];
-            if(file_exists($oldpath) && preg_match('/static/',$oldpath)){
+            $items = explode('/',$oldpath);
+            LoadStatic();
+            global $static;
+            $item = $items[0];
+            if(array_key_exists($item,$static)){
                 $type = getFileMimeType($oldpath);
-                echo $type;
                 header('Content-Type: '.$type);
-                require($oldpath);
+                require($static[$items[0]].'/'.$items[1]);
             }else{
                 http_response_code(404);
             }

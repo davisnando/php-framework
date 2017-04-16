@@ -37,12 +37,12 @@ function GetStaticFile($keyname,$filename = null){
         if(is_dir($static[$keyname])){
             $path = $static[$keyname].'/'.$filename;
             if(file_exists($path)){
-                echo $path;
+                echo $keyname.'/'.$filename;
             }else{
                 echo "";
             }
         }else{
-            echo $static[$keyname];
+            echo "";
         }
     }else{
         echo "";
@@ -97,6 +97,7 @@ function GetTemplate($keyname,$filename = null){
 }
 function getFileMimeType($file) {
     $images = ['gif','jpg','jpeg','png'];
+    $icons = ['ico'];
     $stylesheets = ['css'];
     $javascript = ['js'];
     $array = explode('.',$file);
@@ -107,6 +108,8 @@ function getFileMimeType($file) {
         return "text/".$extension;
     }else if(in_array($extension,$javascript)){
         return "application/javascript";
+    }else if(in_array($extension,$icons)){
+        return "image/x-icon";
     }
-    return $type;
+    return "";
 }
