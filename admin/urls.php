@@ -2,7 +2,10 @@
 require_once("admin/view.php");
 
 $url = [
-    ""=>"index"    
+    ""=>"index",
+    "login"=>"login",
+    "dashboard"=>"dashboard",
+    "logout"=>"logout"
 ];
 
 ?>

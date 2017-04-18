@@ -1,10 +1,11 @@
 <?php
+session_start();
+require_once("settings/config.php");
 if(strtolower(DEBUG) == "true"){
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 }
-require_once("settings/config.php");
 require_once("settings/functions.php");
 $var = $_GET['path'];
 RunFunc("settings/urls.php", $var);
@@ -70,17 +71,21 @@ function RunFunc($urlfile,$path,$oldpath=null){
             RunFunc($urlfile,$keyname,$oldpath);
             return;
         }else{
-            $oldpath = $_GET['path'];
-            $items = explode('/',$oldpath);
-            LoadStatic();
-            global $static;
-            $item = $items[0];
-            if(array_key_exists($item,$static)){
-                $type = getFileMimeType($oldpath);
-                header('Content-Type: '.$type);
-                require($static[$items[0]].'/'.$items[1]);
-            }else{
-                http_response_code(404);
+            try{
+                $oldpath = $_GET['path'];
+                $items = explode('/',$oldpath);
+                LoadStatic();
+                global $static;
+                $item = $items[0];
+                if(array_key_exists($item,$static)){
+                    $type = getFileMimeType($oldpath);
+                    header('Content-Type: '.$type);
+                    require($static[$items[0]].'/'.$items[1]);
+                }else{
+                    http_response_code(404);
+                }
+            }catch(Exception $ex){
+                    http_response_code(404);
             }
         }
     }
