@@ -1,7 +1,7 @@
 <?php
 class model{
     function __construct(){
-        $this->dbh = new PDO('mysql:host=localhost;dbname='.DB_Database, DB_USER, DB_PASS);
+        $this->dbh = new PDO('mysql:host='.DB_IP.';dbname='.DB_Database, DB_USER, DB_PASS);
     }
     public function prepare($query){
         $this->stmt = $this->dbh->prepare($query);

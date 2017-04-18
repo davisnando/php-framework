@@ -37,7 +37,7 @@ function GetStaticFile($keyname,$filename = null){
         if(is_dir($static[$keyname])){
             $path = $static[$keyname].'/'.$filename;
             if(file_exists($path)){
-                echo $keyname.'/'.$filename;
+                echo '/'.$keyname.'/'.$filename;
             }else{
                 echo "";
             }
