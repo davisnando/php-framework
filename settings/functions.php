@@ -123,7 +123,7 @@ Checks if user has permissions
 
 **/
 function RoleExist($username,$perm){
-    $db = new model("Framework");
+    $db = new model(DB_Database);
     $db->prepare("SELECT Role.idRole,Role.name FROM `Users` JOIN userRole ON Users.idUsers=userRole.idUser JOIN Role ON userRole.idRole=Role.idRole WHERE Users.username=:user");
     $db->bind(":user",$username);
     $result = $db->GetAll();

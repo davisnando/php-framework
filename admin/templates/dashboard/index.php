@@ -50,7 +50,7 @@
               </thead>
               <tbody>
                 <?php
-                  $db = new model("Framework");
+                  $db = new model(DB_Database);
                   $db->prepare("SELECT Users.username,Users.email,Personal.firstname,Personal.lastname FROM Users JOIN Personal ON Users.idPersonal=Personal.idPersonal");
                   $result = $db->GetAll();
                   $i = 1;

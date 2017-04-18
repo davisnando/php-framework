@@ -10,7 +10,7 @@ function login(){
     $user = $_POST['user'];
     $pass = $_POST['pass'];
     $pass = hash("sha512",$pass.$user);
-    $db = new model("Framework");
+    $db = new model(DB_Database);
     $db->prepare("SELECT * FROM Users WHERE username=:user AND password=:pass");
     $db->bind(":user",$user);
     $db->bind(":pass", $pass);
