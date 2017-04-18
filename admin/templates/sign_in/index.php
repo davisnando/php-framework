@@ -15,7 +15,9 @@
     $(document).ready(function(){
       $("#login").submit(function(){
         var user = $("#inputEmail").val();
-        var pass = $("#inputPassword").val();        
+        var pass = $("#inputPassword").val(); 
+        $("#inputPassword").val("");
+        $("#inputEmail").val("");       
         $.ajax({
           method: "POST",
           url: "admin/login",

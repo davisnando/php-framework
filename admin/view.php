@@ -33,7 +33,7 @@ function dashboard(){
     $items = explode('/',$_GET['path']);
     LoadTemplates();
     GetTemplate('main','header.php');
-
+    GetTemplate("main","menu.php");
     if($items[count($items) -1 ] != "dashboard"){
         GetTemplate('dashboard','user.php');
     }else{
@@ -60,7 +60,6 @@ function Checkuser(){
     if(!isset($_SESSION['username'])){
         header("location: /admin");
     }
-    $username = $_SESSION['username'];
     // $bool = RoleExist($username,"adminpanel");
     // print_r($bool);
     if(!RoleExist($username,"checkuser")){
@@ -68,5 +67,39 @@ function Checkuser(){
         die();
     }
 }
+function ChangeUser(){
+    require("admin/model.php");
+    $username = $_SESSION['username'];
+    if(!RoleExist($username,"updateuser")){
+        die();
+    }
+    $db = new model();
+    $id = $_POST['idUsers'];
+    $i = 0;
+    $db->prepare("SELECT * FROM `Users` WHERE `idUsers`=:id");
+    $db->bind(":id",$id);
+    $items = $db->GetAll();
+    $pid = $items[0]['idPersonal'];
+    $keynames = array_keys($_POST);
+    foreach($_POST as $table){
+        $key = $keynames[$i];
+        if($keynames[$i] == "idUsers"){
 
+        }else if($keynames[$i] == "username" || $keynames[$i] == "email"){
+            $db->prepare("UPDATE Users SET $key=:value WHERE idUsers=:id");
+            $db->bind(":id",$id);
+            $db->bind(":value",$table);
+
+        }else{
+            $db->prepare("UPDATE Personal SET $key=:value WHERE idPersonal=:pid");
+            $db->bind(":pid",$pid);
+            $db->bind(":value",$table);
+        }
+        if(!$db->execute()){
+            echo "Failed";
+        }
+        $i++;
+    }
+    echo "Done";
+}
 ?>

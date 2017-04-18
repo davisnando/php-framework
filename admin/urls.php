@@ -5,7 +5,8 @@ $url = [
     ""=>"index",
     "login"=>"login",
     "dashboard"=>"dashboard",
-    "logout"=>"logout"
+    "logout"=>"logout",
+    "change"=>"ChangeUser",
 ];
 
 ?>
