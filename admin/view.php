@@ -30,10 +30,17 @@ function logout(){
 }
 function dashboard(){
     dashboardPerm();
+    $items = explode('/',$_GET['path']);
     LoadTemplates();
     GetTemplate('main','header.php');
-    GetTemplate('dashboard','index.php');
+
+    if($items[count($items) -1 ] != "dashboard"){
+        GetTemplate('dashboard','user.php');
+    }else{
+        GetTemplate('dashboard','index.php');
+    }
     GetTemplate('main','footer.php'); 
+
 }
 function dashboardPerm(){
     require("admin/model.php");
@@ -44,6 +51,19 @@ function dashboardPerm(){
     // $bool = RoleExist($username,"adminpanel");
     // print_r($bool);
     if(!RoleExist($username,"adminpanel")){
+        header("location: /admin");
+        die();
+    }
+}
+function Checkuser(){
+    require("admin/model.php");
+    if(!isset($_SESSION['username'])){
+        header("location: /admin");
+    }
+    $username = $_SESSION['username'];
+    // $bool = RoleExist($username,"adminpanel");
+    // print_r($bool);
+    if(!RoleExist($username,"checkuser")){
         header("location: /admin");
         die();
     }

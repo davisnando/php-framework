@@ -57,7 +57,7 @@
                 ?>
                 <?php  foreach($result as $items): ?>
                 <?php $user = $items['username'];?>
-                <tr onclick="showInfo('<?php echo $user;?>')">
+                <tr onclick="window.location = 'dashboard/<?php echo $user;?>'">
                   <td><?php echo $i; $i++; ?></td>
                   <?php foreach($items as $item): ?>
                   <td><?php echo $item;?></td>
