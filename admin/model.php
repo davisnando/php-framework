@@ -1,6 +1,6 @@
 <?php
 class model{
-    function __construct($dbname = null){
+    function __construct(){
         $this->dbh = new PDO('mysql:host='.DB_IP.';dbname='.DB_Database, DB_USER, DB_PASS);
     }
     public function prepare($query){

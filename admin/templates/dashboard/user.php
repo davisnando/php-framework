@@ -18,7 +18,7 @@
           <h1>Dashboard</h1>          
           <h2>Change User</h2>
                 <?php
-                  $db = new model(DB_Database);
+                  $db = new model();
                   $db->prepare("SELECT Users.idUsers,Users.email,Users.username, Personal.* FROM Users JOIN Personal on Users.idPersonal=Personal.idPersonal WHERE Users.username=:user");
                   $items = explode('/',$_GET['path']);
                   $user = $items[count($items) - 1];
