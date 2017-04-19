@@ -13,3 +13,53 @@ Every app can have a static folder and a template folder for his stylesheet and 
 you can load your static files with this command:```LoadStatic()```. then can you search your file like this ``` GetStaticFile('subfolder','filename')``` . If you want to load templates then you need to use this command: 
 ``` LoadTemplates()```. Then you can load your file like this: ```GetTemplate(sub folder,filename)``` it also can used as this: ```GetTemplate('filename')``` if you dont use subfolders
 
+# admin page
+You can go to the admin page by typing this in your webbrowser http://yourwebsite.com/admin. There can you add users and edit users
+
+# Functions
+
+## load templates
+```
+// load templates
+LoadTemplates()
+// use template
+GetTemplate(sub folder,filename)
+// or just the filename if you doesn't use subfolders
+GetTemplate('filename')
+```
+## load static files
+```
+// load templates
+LoadStatic();
+// use template
+GetStaticFile('subfolder','filename');
+```
+## Database
+```
+$db = new Model();
+// prepare sql query
+$db->prepare("SELECT * FROM Users");
+// bind parameters to query
+$db->bind(":id",$id);
+// execute query
+$db->execute();
+// fetch one row
+$db->fetch();
+// get all rows
+$result = $db->GetAll();
+// debug query
+$db->debug();
+
+```
+## User function
+```
+// creates a user
+// array keyname is column name value is value of column
+User::createUser($array);
+// Login function and creates a session when is successfull
+User::Login($user,$pass);
+// checks if the user has the specific permission
+RoleExist($username,$permissionname);
+
+```
+ 
