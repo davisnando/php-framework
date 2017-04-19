@@ -59,7 +59,7 @@ User::createUser($array);
 // Login function and creates a session when is successfull
 User::Login($user,$pass);
 // checks if the user has the specific permission
-RoleExist($username,$permissionname);
+User::RoleExist($username,$permissionname);
 
 ```
  
