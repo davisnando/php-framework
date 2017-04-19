@@ -1,5 +1,9 @@
 <?php
 function index(){
+     if(isset($_SESSION['username'])){
+        header("location: /admin/dashboard");
+        die();
+    }
     LoadTemplates();
     GetTemplate('main','header.php');
     GetTemplate('sign_in','index.php');
@@ -74,7 +78,7 @@ function ChangeUser(){
         die();
     }
     $db = new model();
-    $id = $_POST['idUsers'];
+    $id = $_SESSION['ChangeID'];
     $i = 0;
     $db->prepare("SELECT * FROM `Users` JOIN Personal ON Users.idPersonal = Personal.idPersonal WHERE `idUsers`=:id");
     $db->bind(":id",$id);
@@ -104,6 +108,89 @@ function ChangeUser(){
         }
         $i++;
     }
+    echo "Done";
+}
+function CreateUser(){
+   require("admin/model.php");
+   $username = $_SESSION['username'];
+    if(!RoleExist($username,"createuser")){
+        die();
+    } 
+    $db = new model();
+    $db->prepare("SHOW COLUMNS FROM Users");
+    $usertable = $db->GetAll();
+    $usertablenames = [];
+    foreach($usertable as $table){
+        array_push($usertablenames,$table['Field']);
+    }
+    $db->prepare("SHOW COLUMNS FROM Personal");
+    $personaltable = $db->GetAll();
+    $personaltablenames = [];
+    foreach($personaltable as $table){
+        array_push($personaltablenames,$table['Field']);
+    }
+    $keynames = array_keys($_POST);
+    $i = 0;
+    $userkomma = false;
+    $personalkomma = false;
+    $userquery1 = "";
+    $binduser = "";
+    $personalquery1 = "";
+    $bindpersonal = "";
+    $personal = [];
+    $uservalue = [];
+    $_POST['password'] = hash('sha512',$_POST['password'].$_POST['username']);
+    foreach($_POST as $item){
+        if(in_array($keynames[$i],$personaltablenames)){
+            if($personalkomma){
+             $personalquery1 = $personalquery1.",";   
+             $bindpersonal = $bindpersonal.",";
+            }
+            $personalkomma = True;
+            $personalquery1 = $personalquery1.$keynames[$i];
+            $bindpersonal = $bindpersonal.":".$keynames[$i];
+            $tempar = [":".$keynames[$i],$item];
+            array_push($personal,$tempar);
+        }else if(in_array($keynames[$i],$usertablenames)){
+            if($userkomma){
+             $userquery1 = $userquery1.",";
+             $binduser = $binduser.",";   
+            }
+            $userkomma = True;
+            $userquery1 = $userquery1.$keynames[$i];
+            $binduser = $binduser.":".$keynames[$i];
+            $tempar = [":".$keynames[$i],$item];
+            array_push($uservalue,$tempar);
+        }else{
+            echo "Not exist";
+        }        
+        $i++;
+    }
+    $db->prepare("SELECT * FROM Users WHERE username=:user");
+    $db->bind(":user",$_POST['username']);
+    $result = $db->GetAll();
+    if(count($result) >=1){
+        echo "username";
+        die();
+    }
+    $query1 = "INSERT INTO Personal($personalquery1) VALUES($bindpersonal)";
+    $db->prepare($query1);
+    foreach($personal as $bindvalue){
+        $db->bind($bindvalue[0],$bindvalue[1]);
+    }
+    $db->execute();
+    $id = $db->dbh->lastInsertId();
+    $query1 = "INSERT INTO Users($userquery1,idPersonal) VALUES($binduser,:id)";
+    $db->prepare($query1);
+    foreach($uservalue as $bindvalue){
+        $db->bind($bindvalue[0],$bindvalue[1]);
+    }
+    $db->bind(":id",$id);
+    $db->execute();
+    $id = $db->dbh->lastInsertId();
+    $db->prepare("INSERT INTO userRole(idUser,idRole) VALUES(:user,2)");
+    $db->bind(":user",$id);
+    $db->execute();
     echo "Done";
 }
 ?>

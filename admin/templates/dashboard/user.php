@@ -15,8 +15,8 @@
         </nav>
 
         <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-          <h1>Dashboard</h1>
-          <h2>Users</h2>
+          <h1>Dashboard</h1>          
+          <h2>Change User</h2>
                 <?php
                   $db = new model(DB_Database);
                   $db->prepare("SELECT Users.idUsers,Users.email,Users.username, Personal.* FROM Users JOIN Personal on Users.idPersonal=Personal.idPersonal WHERE Users.username=:user");
@@ -45,7 +45,7 @@
                      <br>
                    <?php endif;?>
                    <?php if($itemkey == "idUsers"):?>
-                     <input type="hidden" name="idUsers" value="<?php echo $item  ?>">
+                     <?php $_SESSION['ChangeID'] = $item;?>
                    <?php endif;?>
                 <?php endforeach;?>
               <input type="submit" class="btn btn-success" value="save">

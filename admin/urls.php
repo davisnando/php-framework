@@ -7,6 +7,7 @@ $url = [
     "dashboard"=>"dashboard",
     "logout"=>"logout",
     "change"=>"ChangeUser",
+    "create"=>"CreateUser",
 ];
 
 ?>
