@@ -117,31 +117,3 @@ function getFileMimeType($file) {
     }
     return "";
 }
-/** 
-
-Checks if user has permissions
-
-**/
-function RoleExist($username,$perm){
-    $db = new model(DB_Database);
-    $db->prepare("SELECT Role.idRole,Role.name FROM `Users` JOIN userRole ON Users.idUsers=userRole.idUser JOIN Role ON userRole.idRole=Role.idRole WHERE Users.username=:user");
-    $db->bind(":user",$username);
-    $result = $db->GetAll();
-    foreach($result as $item){
-        if($item['name'] == $perm){
-            return True;
-        }
-        $db->prepare("SELECT Perm.description FROM `permRole` JOIN Perm ON Perm.idPerm=permRole.idPerm WHERE `idRole`=:id");
-        $db->bind(":id",$item['idRole']);
-        $result1 = $db->GetAll();
-        foreach($result1 as $item1){
-            if(in_array($perm,$item1) )
-            {
-                return True;
-            }
-        }
-
-
-    }
-    return False;
-}

@@ -2,7 +2,7 @@
 require("admin/model.php");
 require("classes/user.php");
 function index(){
-     if(isset($_SESSION['username']) && RoleExist($_SESSION['username'],"adminpanel")){
+     if(isset($_SESSION['username']) && User::RoleExist($_SESSION['username'],"adminpanel")){
         header("location: /admin/dashboard");
         die();
     }
@@ -46,9 +46,9 @@ function dashboardPerm(){
         header("location: /admin");
     }
     $username = $_SESSION['username'];
-    // $bool = RoleExist($username,"adminpanel");
+    // $bool = User::RoleExist($username,"adminpanel");
     // print_r($bool);
-    if(!RoleExist($username,"adminpanel")){
+    if(!User::RoleExist($username,"adminpanel")){
         header("location: /admin");
         die();
     }
@@ -57,16 +57,16 @@ function Checkuser(){
     if(!isset($_SESSION['username'])){
         header("location: /admin");
     }
-    // $bool = RoleExist($username,"adminpanel");
+    // $bool = User::RoleExist($username,"adminpanel");
     // print_r($bool);
-    if(!RoleExist($username,"checkuser")){
+    if(!User::RoleExist($username,"checkuser")){
         header("location: /admin");
         die();
     }
 }
 function ChangeUser(){
     $username = $_SESSION['username'];
-    if(!RoleExist($username,"updateuser")){
+    if(!User::RoleExist($username,"updateuser")){
         die();
     }
     $db = new model();
@@ -104,7 +104,7 @@ function ChangeUser(){
 }
 function CreateUser(){
     $username = $_SESSION['username'];
-    if(!RoleExist($username,"createuser")){
+    if(!User::RoleExist($username,"createuser")){
         die();
     } 
     User::createUser($_POST);
