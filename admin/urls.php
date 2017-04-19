@@ -8,6 +8,7 @@ $url = [
     "logout"=>"logout",
     "change"=>"ChangeUser",
     "create"=>"CreateUser",
+    "role"=>"Role",
 ];
 
 ?>
