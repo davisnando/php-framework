@@ -19,7 +19,7 @@ You can go to the admin page by typing this in your webbrowser http://yourwebsit
 # Functions
 
 ## load templates
-```
+```php
 <?php
 // load templates
 LoadTemplates()
@@ -29,14 +29,14 @@ GetTemplate(sub folder,filename)
 GetTemplate('filename') ?>
 ```
 ## load static files
-```
+```php
 // load templates
 <?php LoadStatic();
 // use template
 GetStaticFile('subfolder','filename'); ?>
 ```
 ## Database
-```
+```php
 <?php
 $db = new Model();
 // prepare sql query
@@ -54,7 +54,7 @@ $db->debug();
 ?>
 ```
 ## User function
-```
+```php
 <?php
 // creates a user
 // array keyname is column name value is value of column
