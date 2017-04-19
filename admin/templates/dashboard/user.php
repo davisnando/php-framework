@@ -40,7 +40,7 @@
                      $itemkey  = $allKeys[$i];
                      $i++;
                    ?>
-                   <?php if($itemkey != "idUsers" && $itemkey != "idPersonal"): ?>
+                   <?php if($itemkey != "idUsers" && $itemkey != "idPersonal" && $itemkey != "username"): ?>
                      <input type="" class="form-control" style="width: 30%;" name="<?php echo $itemkey ?>" value="<?php echo $item; ?>">
                      <br>
                    <?php endif;?>
@@ -63,8 +63,11 @@
           data: GetData
         })
           .done(function( msg ) {
-              console.log(msg);
-              alert(msg);
+              if(msg == "Done"){
+                alert("Saved");
+              }else{
+                alert("something goes wrong!");
+              }
           });
         return false;
       });

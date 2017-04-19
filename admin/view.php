@@ -76,13 +76,17 @@ function ChangeUser(){
     $db = new model();
     $id = $_POST['idUsers'];
     $i = 0;
-    $db->prepare("SELECT * FROM `Users` WHERE `idUsers`=:id");
+    $db->prepare("SELECT * FROM `Users` JOIN Personal ON Users.idPersonal = Personal.idPersonal WHERE `idUsers`=:id");
     $db->bind(":id",$id);
     $items = $db->GetAll();
     $pid = $items[0]['idPersonal'];
+    $whitelist = array_keys($items[0]);
     $keynames = array_keys($_POST);
     foreach($_POST as $table){
         $key = $keynames[$i];
+        if(!in_array($key,$whitelist)){
+            die();
+        }
         if($keynames[$i] == "idUsers"){
 
         }else if($keynames[$i] == "username" || $keynames[$i] == "email"){
