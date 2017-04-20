@@ -92,21 +92,6 @@ CREATE TABLE `Personal` (
 --
 
 INSERT INTO `Personal` (`idPersonal`, `firstname`, `lastname`) VALUES
-(1, 'Nando', 'Davis'),
-(2, 'asd', 'asd'),
-(3, 'test', 'test'),
-(4, 'test', 'test'),
-(5, 'asd', 'asd'),
-(6, 'askldm', 'askdm'),
-(7, 'adk', 'asdkm'),
-(8, 'admin', 'admin'),
-(9, 'admin', 'admin'),
-(10, 'test', 'test'),
-(11, 'test', 'test'),
-(12, 'test', 'test'),
-(13, 'nando', 'davis'),
-(14, 'nando', 'davis'),
-(15, 'test', 'test');
 
 -- --------------------------------------------------------
 
@@ -126,7 +111,6 @@ CREATE TABLE `Role` (
 INSERT INTO `Role` (`idRole`, `name`) VALUES
 (1, 'admin'),
 (2, 'Default'),
-(5, 'moderator');
 
 -- --------------------------------------------------------
 
@@ -145,10 +129,6 @@ CREATE TABLE `userRole` (
 --
 
 INSERT INTO `userRole` (`iduserRole`, `idUser`, `idRole`) VALUES
-(2, 1, 1),
-(6, 9, 1),
-(7, 10, 2),
-(11, 7, 5);
 
 -- --------------------------------------------------------
 
