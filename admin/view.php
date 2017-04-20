@@ -116,4 +116,36 @@ function Role(){
     GetTemplate('dashboard','role.php');
     GetTemplate('main','footer.php'); 
 }
+function getPerm(){
+    $id = $_POST['id'];
+    $db = new Model();
+    $db->prepare("SELECT idPerm FROM permRole WHERE idRole=:id");
+    $db->bind(":id",$id);
+    $result = $db->GetAll();
+    echo json_encode($result);
+}
+function setPerm(){
+    if(!User::RoleExist($_SESSION['username'],"changerole")){
+        die();
+    }
+    $id = $_POST['idRole'];
+    $idPerm = $_POST['idPerm'];
+    $toggle = $_POST['toggle'];
+    $db = new Model();
+
+    if($toggle == "1"){
+        $db->prepare("INSERT INTO permRole(idRole,idPerm) VALUES(:role,:perm)");
+        $db->bind(":role", $id);
+        $db->bind(":perm",$idPerm);
+        $db->execute();
+        echo "Added";
+
+    }else{
+        $db->prepare("DELETE FROM permRole WHERE idRole=:role and idPerm=:perm");
+        $db->bind(":role", $id);
+        $db->bind(":perm",$idPerm);
+        $db->execute();
+        echo "Deleted";
+    }
+}
 ?>

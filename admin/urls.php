@@ -9,6 +9,8 @@ $url = [
     "change"=>"ChangeUser",
     "create"=>"CreateUser",
     "role"=>"Role",
+    "getPerm"=>"getPerm",
+    "setPerm"=>"setPerm",
 ];
 
 ?>

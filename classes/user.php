@@ -52,6 +52,10 @@ class User{
         $personal = [];
         $uservalue = [];
         $array['username'] = strtolower( $array['username']);
+        if($array['username'] == "dashboard"){
+            echo "username";
+            die();
+        }
         $array['password'] = hash('sha512',$array['password'].$array['username']);
         foreach($array as $item){
             if(in_array($keynames[$i],$personaltablenames)){
