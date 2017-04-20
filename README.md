@@ -19,23 +19,25 @@ You can go to the admin page by typing this in your webbrowser http://yourwebsit
 # Functions
 
 ## load templates
-```
+```php
+<?php
 // load templates
 LoadTemplates()
 // use template
 GetTemplate(sub folder,filename)
 // or just the filename if you doesn't use subfolders
-GetTemplate('filename')
+GetTemplate('filename') ?>
 ```
 ## load static files
-```
+```php
 // load templates
-LoadStatic();
+<?php LoadStatic();
 // use template
-GetStaticFile('subfolder','filename');
+GetStaticFile('subfolder','filename'); ?>
 ```
 ## Database
-```
+```php
+<?php
 $db = new Model();
 // prepare sql query
 $db->prepare("SELECT * FROM Users");
@@ -49,10 +51,11 @@ $db->fetch();
 $result = $db->GetAll();
 // debug query
 $db->debug();
-
+?>
 ```
 ## User function
-```
+```php
+<?php
 // creates a user
 // array keyname is column name value is value of column
 User::createUser($array);
@@ -60,6 +63,6 @@ User::createUser($array);
 User::Login($user,$pass);
 // checks if the user has the specific permission
 User::RoleExist($username,$permissionname);
-
+?>
 ```
  
