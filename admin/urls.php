@@ -11,6 +11,8 @@ $url = [
     "role"=>"Role",
     "getPerm"=>"getPerm",
     "setPerm"=>"setPerm",
+    "changeRole"=>"changeRole",
+    "createRole"=>"createRole",
 ];
 
 ?>

@@ -110,6 +110,10 @@ function CreateUser(){
     User::createUser($_POST);
 }
 function Role(){
+    if(!User::RoleExist($_SESSION['username'],"Role")){
+        header("location: /admin/dashboard");
+        die();
+    }
     LoadTemplates();
     GetTemplate('main','header.php');
     GetTemplate("main","menu.php");
@@ -147,5 +151,46 @@ function setPerm(){
         $db->execute();
         echo "Deleted";
     }
+}
+function changeRole(){
+    if(!User::RoleExist($_SESSION['username'],"changeUserRole")){
+        die();
+    }
+    $idRole = $_POST['idRole'];
+    $idUser = $_POST['idUser'];
+    $db = new Model();
+    $db->prepare("SELECT * FROM userRole WHERE idUser=:id and idRole=1");
+    $db->bind(":id",$idUser);
+    $result = $db->GetAll();
+    if(count($result) > 0){
+        die();
+    }
+    $db->prepare("DELETE FROM userRole WHERE idUser=:id");
+    $db->bind(":id",$idUser);
+    $db->execute();
+    $db->prepare("INSERT INTO userRole(idRole, idUser) VALUES(:role,:id)");
+    $db->bind(":id",$idUser);
+    $db->bind(":role",$idRole);
+    $db->execute();  
+    echo "Done";  
+}
+function createRole(){
+    if(!User::RoleExist($_SESSION['username'],"createRole")){
+        die();
+    }
+    $name = $_POST['name'];
+    $db = new Model();
+    $db->prepare("SELECT * FROM Role WHERE name=:name");
+    $db->bind(":name",$name);
+    $result = $db->GetAll();
+    if(count($result) > 0){
+        echo "Exist";
+        die();
+    }
+    $db->prepare("INSERT INTO Role(name) VALUES(:name)");
+    $db->bind(":name",$name);
+    $db->execute();
+    echo "Done";
+
 }
 ?>
