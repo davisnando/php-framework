@@ -28,7 +28,7 @@
                      $i++;
                    ?>
                    <?php if($itemkey != "idUsers" && $itemkey != "idPersonal" && $itemkey != "username"): ?>
-                     <input type="" class="form-control" style="width: 30%;" name="<?php echo $itemkey ?>" value="<?php echo $item; ?>">
+                     <input type="" class="form-control" name="<?php echo $itemkey ?>" value="<?php echo $item; ?>">
                      <br>
                    <?php endif;?>
                    <?php if($itemkey == "idUsers"):?>
