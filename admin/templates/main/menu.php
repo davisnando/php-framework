@@ -10,6 +10,9 @@
             <a class="nav-link" href="/admin/dashboard">Home</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/admin/role">Role</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/admin/logout">Logout</a>
           </li>
         </ul>
