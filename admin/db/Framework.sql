@@ -69,10 +69,6 @@ INSERT INTO `permRole` (`idpermRole`, `idRole`, `idPerm`) VALUES
 (5, 1, 5),
 (6, 1, 6),
 (7, 1, 7),
-(8, 5, 1),
-(9, 5, 3),
-(10, 5, 4),
-(11, 5, 2),
 (12, 1, 8);
 
 -- --------------------------------------------------------
@@ -86,12 +82,6 @@ CREATE TABLE `Personal` (
   `firstname` varchar(255) NOT NULL,
   `lastname` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Gegevens worden geëxporteerd voor tabel `Personal`
---
-
-INSERT INTO `Personal` (`idPersonal`, `firstname`, `lastname`) VALUES
 
 -- --------------------------------------------------------
 
@@ -124,11 +114,7 @@ CREATE TABLE `userRole` (
   `idRole` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Gegevens worden geëxporteerd voor tabel `userRole`
---
 
-INSERT INTO `userRole` (`iduserRole`, `idUser`, `idRole`) VALUES
 
 -- --------------------------------------------------------
 
