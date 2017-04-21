@@ -13,6 +13,9 @@
             <a class="nav-link" href="/admin/role">Role</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/admin/table">Tables</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/admin/logout">Logout</a>
           </li>
         </ul>
@@ -27,6 +30,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/admin/role">Role</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/table">Tables</a>
             </li>
           </ul>
         </nav>

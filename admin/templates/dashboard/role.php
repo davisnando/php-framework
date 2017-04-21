@@ -38,6 +38,12 @@
             <?php endforeach; ?>
           </div>
           <hr>
+          <h2>Create permission</h2>
+          <form id="createPerm">
+            <input type="text" id="NamePerm" class="form-control" placeholder="Name of permission" value="" required>
+            <input type="submit" class="form-control" value="Create">
+          </form>
+          <hr>   
           <h2>Change role from user</h2>
           <form id="ChangeRole">
           <label >Select User:</label>
@@ -142,5 +148,27 @@
            alert("Failed to add role");
          }
       });
-    });
+      });
+
+      $("#createPerm").submit(function(){
+      var name = $("#NamePerm").val();
+      console.log(name);
+      if(name == ""){
+        return false;
+      }
+      var postdata = {"name":name};
+      $.ajax({
+         method: "POST",
+         url: "/admin/createPerm",
+         data: postdata
+      })
+      .done(function( msg ) {
+         if(msg == "Done"){
+           alert("Added");
+         }else{
+           alert("Failed to add permission");
+         }
+      });
+        });
+
     </script>

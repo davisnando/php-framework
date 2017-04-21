@@ -13,6 +13,10 @@ $url = [
     "setPerm"=>"setPerm",
     "changeRole"=>"changeRole",
     "createRole"=>"createRole",
+    "createPerm"=>"createPerm",
+    "table"=>"Table",
+    "changeTable"=>"changeTable",
+    "saveItem"=>"saveItem",
 ];
 
 ?>

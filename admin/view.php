@@ -193,4 +193,105 @@ function createRole(){
     echo "Done";
 
 }
+function createPerm(){
+    if(!User::RoleExist($_SESSION['username'],"createRole")){
+        die();
+    }
+    $name = $_POST['name'];
+    $db = new Model();
+    $db->prepare("SELECT * FROM Perm WHERE description=:name");
+    $db->bind(":name",$name);
+    $result = $db->GetAll();
+    if(count($result) > 0){
+        echo "Exist";
+        die();
+    }
+    $db->prepare("INSERT INTO Perm(description) VALUES(:name)");
+    $db->bind(":name",$name);
+    $db->execute();
+    echo "Done";
+
+}
+function Table(){
+    if(!User::RoleExist($_SESSION['username'],"Tables")){
+        header("location: /admin/dashboard");
+        die();
+    }
+    $items = explode('/',$_GET['path']);
+    LoadTemplates();
+    GetTemplate('main','header.php');
+    GetTemplate("main","menu.php");
+    if($items[count($items) -1 ] != "table"){
+        $_SESSION['table'] = $items[count($items) -1 ];
+        GetTemplate('dashboard','inTable.php');
+    }else{
+        GetTemplate('dashboard','table.php');
+    }
+    GetTemplate("main","footer.php");
+
+}
+function changeTable(){
+    if(!isset($_SESSION['table'])){
+        header("location: /admin/dashboard");
+        die();
+    }
+    $items = explode('/',$_GET['path']);
+    LoadTemplates();
+    GetTemplate('main','header.php');
+    GetTemplate("main","menu.php");
+    $id = end($items);
+    $_SESSION['ChangeID'] = $id;
+    if(!is_numeric($id)){
+        header("location: /admin/dashboard");
+        die();
+    }
+            GetTemplate('dashboard','item.php');
+
+    GetTemplate("main","footer.php");
+
+}
+function saveItem(){
+    if(!isset($_SESSION['ChangeID']) || !User::RoleExist($_SESSION['username'],"ChangeTable") || !isset($_SESSION['table'])){
+        die();
+    }
+   $id = $_SESSION['ChangeID'];
+   $table = $_SESSION['table'];
+   $db = new Model();
+   $db->prepare("SHOW COLUMNS FROM $table");
+   $result = $db->GetAll();
+   $fieldnames = [];
+   $primarykey = "";
+   $first = True;
+   foreach($result as $item){
+        if($item['Key'] == "PRI"){
+            $primarykey = $item['Field'];
+        }
+        array_push($fieldnames,$item['Field']);
+   }
+   $keynames = array_keys($_POST);
+   $allItems = $_POST;
+   $i = 0;
+   $query = "";
+   foreach($allItems as $item){
+       if(!in_array($keynames[$i],$fieldnames)){
+           die();
+       }
+        if($i == 0){
+            $query = $keynames[$i]."='".$item."'";
+        }
+        else{
+            $query = $query.", ".$keynames[$i]."='".$item."'";
+
+        }
+        $i++;
+   }
+   $query = "UPDATE $table SET ".$query." WHERE $primarykey=:id";
+   $db->prepare($query);
+   $db->bind(":id",$id);
+   if(   $db->execute()){
+       echo "Done";
+   }else{
+       echo "Failed";
+   }
+}
 ?>
