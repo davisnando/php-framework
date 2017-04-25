@@ -4,6 +4,7 @@
         <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
           <h1>Table system</h1>  
           <h2>Tables</h2>
+          <h5>WATCH OUT WHEN CHANGING TABLES</h5>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>

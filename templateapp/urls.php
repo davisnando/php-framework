@@ -1,8 +1,7 @@
 <?php
-require_once("login/view.php");
+require_once("templateapp/view.php");
 $url = [
     ""=>"index"
-    
 ];
 
 ?>

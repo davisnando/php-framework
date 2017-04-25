@@ -1,15 +1,9 @@
 <?php
 function index(){
-    echo "hi";
-    echo "<a href='login'>login</a>";
-    // LoadStatic();
-    // GetStaticFile('main','stylesheet.css');
-    // LoadTemplates();
-    // GetTemplate('login','test.php');
+    echo "Hello World";
 }
-function login(){
-    echo "Hallo";
-    echo "<br>";
+function test(){
+    LoadTemplates();
 }
 
 ?>

@@ -117,3 +117,78 @@ function getFileMimeType($file) {
     }
     return "";
 }
+function createInput($type, $name,$value,$prop = []){
+    $input = ["button", "checkbox", "file","hidden","image","password","radio","reset","submit","text"];
+    $bootstrap = True;
+    $classes = "";
+    $propstring = "";
+
+    if(array_key_exists("bootstrap",$prop)){
+        if($prop['bootstrap'] == False){
+            $bootstrap = False;
+        }
+    }
+    if(array_key_exists("class",$prop)){
+        $classes = $prop['class'];
+    }
+    if(array_key_exists("props",$prop)){
+        $propstring .= $prop['props'];
+    }
+    if($bootstrap){
+        $propstring .= " class='$classes form-control'";
+    }else if($classes != ""){
+        $propstring .= " class='$classes'";
+    }
+    if(in_array($type,$input)){
+        $val = " value='$value'";
+        if($type == "text" || $type == "password"){
+            $val = " placeholder='$value'";
+        }
+        echo "<input type='$type' id='$name'  name='$name' $val $propstring>";
+    }else if($type == "textarea"){
+        echo "<textarea name='$name' id='$name' $propstring placeholder='$value' ></textarea>";
+    }else{
+        echo "<script>console.log('input not recognized');</script>";
+    }
+
+}
+function RandomName($filename){
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < 10; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return hash('sha1',$randomString);
+}
+function upload($file,$whitelist_Ext,$whitelist_Type){
+    if(empty($file)){
+        echo "empty";
+        die();
+    }
+    $path = "uploads/";
+    $filename = $file['name'];
+    $fileType = $file['type'];
+    $file_parts = pathinfo($filename);
+    $ext = $file_parts['extension'];
+    if(!in_array($fileType,$whitelist_Type) ){
+       echo "invalid file type";
+       die();
+    }
+    if(!in_array($ext,$whitelist_Ext)){
+       echo "invalid file extension";
+       die();
+    }
+    //generate a new name
+    $randomName = RandomName($filename);
+    $fullName = $path.$randomName.".".$ext;
+    while(file_exists($fullName)){
+        $randomName = RandomName($filename);
+        $fullName = $path.$randomName.".".$ext;
+    }
+    if(move_uploaded_file($_FILES['file']['tmp_name'],$fullName)){
+        return $fullName;
+    }else{
+         echo "Failed to upload";
+    }
+}

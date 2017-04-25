@@ -41,6 +41,8 @@
                 <input type="text" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>"> 
               <?php elseif(preg_match('/text/',$type)):?>
                 <textarea class='form-control' name="<?php echo $fieldname;?>" ><?php echo $row[$fieldname];?></textarea>
+              <?php elseif(preg_match('/date/',$type)):?>
+                <input type="date" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>"> 
               <?php else:?>
                 <input type="text" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>"> 
               <?php endif;  endforeach;?>

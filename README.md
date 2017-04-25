@@ -65,4 +65,18 @@ User::Login($user,$pass);
 User::RoleExist($username,$permissionname);
 ?>
 ```
+## input function
+```php
+<?php
+// Create a input. default is bootstrap on
+createInput(type,name/id,value/placeholder,['class'=>'classname','bootstrap'=>False,'props'=>"style='width='100%''"]);
+?>
+```
+## upload function
+```php
+<?php
+// upload a file in de uploads folder with a random name
+$path = upload(file,whitelist extension, whitelist filetype);
+?>
+```
  
