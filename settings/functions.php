@@ -187,8 +187,97 @@ function upload($file,$whitelist_Ext,$whitelist_Type){
         $fullName = $path.$randomName.".".$ext;
     }
     if(move_uploaded_file($_FILES['file']['tmp_name'],$fullName)){
+        AddLog("Uploaded file with path: ".$fullName);
         return $fullName;
     }else{
          echo "Failed to upload";
     }
+}
+function AddLog($logtext){
+    $db = new Model();
+    $db->prepare("INSERT INTO Log(idUser,Logtext) VALUES(:id,:text)");
+    $db->bind(":id",User::getId($_SESSION['username']));
+    $db->bind(":text",$logtext);
+    $db->execute();
+}
+function stillAlive(){
+    $db = new Model();
+    $db->prepare("DELETE FROM Vistors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
+    $db->execute();
+    $ip = get_client_ip();
+    $db->prepare("SELECT * FROM Vistors_online WHERE IP=:ip");
+    $db->bind(":ip", $ip);
+    $result = $db->GetAll();
+    $query = "";
+    if(count($result) == 0){
+        $query = "INSERT INTO Vistors_online(IP) VALUES(:ip)";
+    }else{
+        $query = "UPDATE `Vistors_online` SET `Last_seen`=CURRENT_TIMESTAMP WHERE `IP`=:ip";
+    }
+    $db->prepare($query);
+    $db->bind(":ip",$ip);
+    $db->execute();
+}
+function addAliveControl(){
+    LoadStatic();
+    echo "<script src=";
+    GetStaticFile("js","stayalive.js");
+    echo "></script>";
+}
+function visit(){
+    $path = $_GET['path'];
+    $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $db = new Model();
+    $ip =  get_client_ip();
+    $db->prepare("SELECT * FROM `Visitors` WHERE `VisitDate` > (NOW() - INTERVAL 5 MINUTE) AND IP=:ip AND Page=:p");
+    $db->bind(":ip",$ip);
+    $db->bind(":p",$actual_link);
+    $result = $db->GetAll();
+    $first = explode('/',$path)[0];
+    $ext = explode('.',$path);
+    if($first == "admin" ){
+        return;
+    }
+    if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        return;
+    }
+    if( count($ext) == 2){
+        return;
+    }
+    addAliveControl();
+    if(count($result) >= 1){
+        return;
+    }
+    stillAlive();
+    $unique = True;
+    if(isset($_COOKIE['Unique'])){
+        $unique = False;
+    }else{
+        setcookie("Unique","False",time() + (10 * 365 * 24 * 60 * 60));
+    }
+    $db->prepare("INSERT INTO Visitors(Uniek,Page,IP) VALUES(:u,:p,:i)");
+    $db->bind(":u",$unique);
+    $db->bind(":p",$actual_link);
+    $db->bind(":i",$ip);
+    $db->execute();
+
+    
+}
+function get_client_ip() {
+    $ipaddress = '';
+    if (getenv('HTTP_CLIENT_IP'))
+        $ipaddress = getenv('HTTP_CLIENT_IP');
+    else if(getenv('HTTP_X_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+    else if(getenv('HTTP_X_FORWARDED'))
+        $ipaddress = getenv('HTTP_X_FORWARDED');
+    else if(getenv('HTTP_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_FORWARDED_FOR');
+    else if(getenv('HTTP_FORWARDED'))
+       $ipaddress = getenv('HTTP_FORWARDED');
+    else if(getenv('REMOTE_ADDR'))
+        $ipaddress = getenv('REMOTE_ADDR');
+    else
+        $ipaddress = 'UNKNOWN';
+    return $ipaddress;
 }

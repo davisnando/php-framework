@@ -1,6 +1,5 @@
 <?php
 require_once("admin/view.php");
-
 $url = [
     ""=>"index",
     "login"=>"login",
@@ -17,6 +16,7 @@ $url = [
     "table"=>"Table",
     "changeTable"=>"changeTable",
     "saveItem"=>"saveItem",
+    "log"=>"ShowLogPage",
 ];
 
 ?>

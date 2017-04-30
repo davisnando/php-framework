@@ -1,5 +1,4 @@
 <?php
-require("admin/model.php");
 require("classes/user.php");
 function index(){
      if(isset($_SESSION['username']) && User::RoleExist($_SESSION['username'],"adminpanel")){
@@ -100,6 +99,8 @@ function ChangeUser(){
         }
         $i++;
     }
+    AddLog("Changed user with id: $id");
+
     echo "Done";
 }
 function CreateUser(){
@@ -143,12 +144,15 @@ function setPerm(){
         $db->bind(":perm",$idPerm);
         $db->execute();
         echo "Added";
+        AddLog("Added permission: $idPerm to Role: $id");
+
 
     }else{
         $db->prepare("DELETE FROM permRole WHERE idRole=:role and idPerm=:perm");
         $db->bind(":role", $id);
         $db->bind(":perm",$idPerm);
         $db->execute();
+        AddLog("Deleted permission: $idPerm from Role: $id");
         echo "Deleted";
     }
 }
@@ -172,6 +176,8 @@ function changeRole(){
     $db->bind(":id",$idUser);
     $db->bind(":role",$idRole);
     $db->execute();  
+    AddLog("Changed role from user: $idUser to $idRole ");
+
     echo "Done";  
 }
 function createRole(){
@@ -190,6 +196,8 @@ function createRole(){
     $db->prepare("INSERT INTO Role(name) VALUES(:name)");
     $db->bind(":name",$name);
     $db->execute();
+    AddLog("Created a new Role with name: ".$name);
+
     echo "Done";
 
 }
@@ -209,6 +217,7 @@ function createPerm(){
     $db->prepare("INSERT INTO Perm(description) VALUES(:name)");
     $db->bind(":name",$name);
     $db->execute();
+    AddLog("Created a new permission with name: ".$name);
     echo "Done";
 
 }
@@ -293,5 +302,17 @@ function saveItem(){
    }else{
        echo "Failed";
    }
+   AddLog("Changed column from table: $table with columnId: $id");
+
+}
+function ShowLogPage(){
+    if(!User::RoleExist($_SESSION['username'],"Log")){
+        die();
+    }
+    LoadTemplates();
+    GetTemplate('main','header.php');
+    GetTemplate('main','menu.php');
+    GetTemplate('dashboard','log.php');
+    GetTemplate('main','footer.php');
 }
 ?>

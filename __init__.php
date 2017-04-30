@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("settings/config.php");
+require_once("classes/model.php");
 if(strtolower(DEBUG) == "true"){
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -9,7 +10,7 @@ if(strtolower(DEBUG) == "true"){
 require_once("settings/functions.php");
 $var = $_GET['path'];
 RunFunc("settings/urls.php", $var);
-
+visit();
 function RunFunc($urlfile,$path,$oldpath=null){
     require($urlfile);
     if($path != ""){
@@ -62,7 +63,6 @@ function RunFunc($urlfile,$path,$oldpath=null){
             return;
         }
         $func();
-        
     }else{
         $oldpath = $path;
         $path1 = explode('/',$path);
@@ -83,9 +83,11 @@ function RunFunc($urlfile,$path,$oldpath=null){
                     require($static[$items[0]].'/'.$items[1]);
                 }else{
                     http_response_code(404);
+                    die();
                 }
             }catch(Exception $ex){
                     http_response_code(404);
+                    die();
             }
         }
     }

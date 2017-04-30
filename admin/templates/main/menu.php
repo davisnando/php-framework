@@ -9,12 +9,22 @@
           <li class="nav-item">
             <a class="nav-link" href="/admin/dashboard">Home</a>
           </li>
+          <?php if(User::RoleExist($_SESSION['username'],'Role')):?>
           <li class="nav-item">
             <a class="nav-link" href="/admin/role">Role</a>
           </li>
+          <?php endif; ?>
+          <?php if(User::RoleExist($_SESSION['username'],'Tables')):?>
+
           <li class="nav-item">
             <a class="nav-link" href="/admin/table">Tables</a>
           </li>
+          <?php endif;?>
+          <?php if(User::RoleExist($_SESSION['username'],'Log')):?>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/log">Log</a>
+          </li>
+          <?php endif;?>
           <li class="nav-item">
             <a class="nav-link" href="/admin/logout">Logout</a>
           </li>
@@ -28,11 +38,20 @@
             <li class="nav-item">
               <a class="nav-link" href="/admin/dashboard">Overview </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/role">Role</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/table">Tables</a>
-            </li>
+          <?php if(User::RoleExist($_SESSION['username'],'Role')):?>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/role">Role</a>
+          </li>
+          <?php endif; ?>
+          <?php if(User::RoleExist($_SESSION['username'],'Tables')):?>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/table">Tables</a>
+          </li>
+          <?php endif;?>
+           <?php if(User::RoleExist($_SESSION['username'],'Log')):?>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/log">Log</a>
+          </li>
+          <?php endif;?>
           </ul>
         </nav>

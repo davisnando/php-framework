@@ -138,6 +138,13 @@ class User{
         }
         return False;
     }
+    public static function getId($username){
+        $db = new Model();
+        $db->prepare("SELECT idUsers FROM Users WHERE username=:id");
+        $db->bind(":id",$username);
+        $result = $db->getAll();
+        return $result[0]['idUsers'];
+    }
 
 }
 
