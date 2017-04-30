@@ -315,4 +315,16 @@ function ShowLogPage(){
     GetTemplate('dashboard','log.php');
     GetTemplate('main','footer.php');
 }
+function statistics(){
+    require("classes/statistics.php");
+    if(!User::RoleExist($_SESSION['username'],"statistics")){
+        die();
+    }
+    LoadTemplates();
+    GetTemplate('main','header.php');
+    GetTemplate('main','menu.php');
+    GetTemplate('dashboard','statistics.php');
+    GetTemplate('main','footer.php');
+}
+
 ?>

@@ -41,13 +41,11 @@
                 <input type="text" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>"> 
               <?php elseif(preg_match('/text/',$type)):?>
                 <textarea class='form-control' name="<?php echo $fieldname;?>" ><?php echo $row[$fieldname];?></textarea>
-              <?php elseif(preg_match('/date/',$type)):?>
-                <input type="date" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>">
-              <?php elseif(preg_match('/datetime/',$type)):?>
-                <input type="datetime-local" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>"> 
-              <?php elseif(preg_match('/timestamp/',$type)):?>
+              <?php elseif(preg_match('/timestamp/',$type) || preg_match('/datetime/',$type)):?>
                 <?php $row[$fieldname] = str_replace(' ','T',$row[$fieldname]);?>
                 <input type="datetime-local" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>"> 
+              <?php elseif(preg_match('/date/',$type)):?>
+                <input type="date" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>">
               <?php else:?>
                 <input type="text" class='form-control' name="<?php echo $fieldname;?>" value="<?php echo $row[$fieldname]; ?>"> 
               <?php endif;  endforeach;?>

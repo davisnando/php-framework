@@ -1,6 +1,6 @@
 <?php
 $url = [
-    ""=>"login/urls.php",
+    ""=>"templateapp/urls.php",
     "admin"=>"admin/urls.php",
     "stillAlive"=>"stillAlive"
 ];

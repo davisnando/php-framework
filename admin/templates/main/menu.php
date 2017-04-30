@@ -25,6 +25,11 @@
             <a class="nav-link" href="/admin/log">Log</a>
           </li>
           <?php endif;?>
+          <?php if(User::RoleExist($_SESSION['username'],'statistics')):?>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/statistics">statistics</a>
+          </li>
+          <?php endif;?>
           <li class="nav-item">
             <a class="nav-link" href="/admin/logout">Logout</a>
           </li>
@@ -53,5 +58,11 @@
             <a class="nav-link" href="/admin/log">Log</a>
           </li>
           <?php endif;?>
+          <?php if(User::RoleExist($_SESSION['username'],'statistics')):?>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/statistics">statistics</a>
+          </li>
+          <?php endif;?>
+          
           </ul>
         </nav>

@@ -17,6 +17,7 @@ $url = [
     "changeTable"=>"changeTable",
     "saveItem"=>"saveItem",
     "log"=>"ShowLogPage",
+    "statistics"=>"statistics",
 ];
 
 ?>
