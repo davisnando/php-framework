@@ -75,8 +75,8 @@ function LoadTemplates(){
     }
 }
 /**
-$keyname = subdirectory name or filename in templates folder
-$filename = filename in subdirectory
+    $keyname = subdirectory name or filename in templates folder
+    $filename = filename in subdirectory
 **/
 function GetTemplate($keyname,$filename = null){
     global $templates;
@@ -96,8 +96,8 @@ function GetTemplate($keyname,$filename = null){
     }
 }
 /** 
-Get File type from extension
-feel free to add more content type
+    Get File type from extension
+    feel free to add more content type
 **/
 function getFileMimeType($file) {
     $images = ['gif','jpg','jpeg','png'];
@@ -117,6 +117,9 @@ function getFileMimeType($file) {
     }
     return "";
 }
+/**
+    Creates a input based on the parameters
+**/
 function createInput($type, $name,$value,$prop = []){
     $input = ["button", "checkbox", "file","hidden","image","password","radio","reset","submit","text"];
     $bootstrap = True;
@@ -152,7 +155,10 @@ function createInput($type, $name,$value,$prop = []){
     }
 
 }
-function RandomName($filename){
+/**
+    Creates a random name
+**/
+function RandomName(){
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -161,6 +167,9 @@ function RandomName($filename){
     }
     return hash('sha1',$randomString);
 }
+/**
+    Upload file last 2 parameters are array's
+**/
 function upload($file,$whitelist_Ext,$whitelist_Type){
     if(empty($file)){
         echo "empty";
@@ -183,7 +192,7 @@ function upload($file,$whitelist_Ext,$whitelist_Type){
     $randomName = RandomName($filename);
     $fullName = $path.$randomName.".".$ext;
     while(file_exists($fullName)){
-        $randomName = RandomName($filename);
+        $randomName = RandomName();
         $fullName = $path.$randomName.".".$ext;
     }
     if(move_uploaded_file($_FILES['file']['tmp_name'],$fullName)){
@@ -193,6 +202,9 @@ function upload($file,$whitelist_Ext,$whitelist_Type){
          echo "Failed to upload";
     }
 }
+/**
+    Add log to admin log panel
+**/
 function AddLog($logtext){
     $db = new Model();
     $db->prepare("INSERT INTO Log(idUser,Logtext) VALUES(:id,:text)");
@@ -200,6 +212,9 @@ function AddLog($logtext){
     $db->bind(":text",$logtext);
     $db->execute();
 }
+/**
+    Let you stay online in the statistic panel
+**/
 function stillAlive(){
     $db = new Model();
     $db->prepare("DELETE FROM Vistors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
@@ -218,30 +233,36 @@ function stillAlive(){
     $db->bind(":ip",$ip);
     $db->execute();
 }
+/**
+    Add alive control javascript to your page
+**/
 function addAliveControl(){
     LoadStatic();
     echo "<script src=";
     GetStaticFile("js","stayalive.js");
     echo "></script>";
 }
+/**
+    Mark you as visit
+**/
 function visit(){
     $path = $_GET['path'];
     $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $db = new Model();
     $ip =  get_client_ip();
-    $db->prepare("SELECT * FROM `Visitors` WHERE `VisitDate` > (NOW() - INTERVAL 5 MINUTE) AND IP=:ip AND Page=:p");
+    $db->prepare("SELECT * FROM `Visitors` WHERE `VisitDate` > (NOW() - INTERVAL 1 MINUTE) AND IP=:ip AND Page=:p");
     $db->bind(":ip",$ip);
-    $db->bind(":p",$actual_link);
+    $db->bind(":p",$path);
     $result = $db->GetAll();
     $first = explode('/',$path)[0];
     $ext = explode('.',$path);
-    if($first == "admin" ){
+    if($first == "admin" || $first == "stillAlive" ){
         return;
     }
     if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         return;
     }
-    if( count($ext) == 2){
+    if(count($ext) == 2){
         return;
     }
     addAliveControl();
@@ -257,12 +278,15 @@ function visit(){
     }
     $db->prepare("INSERT INTO Visitors(Uniek,Page,IP) VALUES(:u,:p,:i)");
     $db->bind(":u",$unique);
-    $db->bind(":p",$actual_link);
+    $db->bind(":p",$path);
     $db->bind(":i",$ip);
     $db->execute();
 
     
 }
+/**
+    Returns the ip of the client
+**/
 function get_client_ip() {
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))

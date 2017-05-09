@@ -1,7 +1,7 @@
 <?php
 
 class Statistics{
-    public static function getAll(){
+    public static function getAllSortByDate(){
         $db = new Model();
         $db->prepare("SELECT * FROM Visitors ");
         $result = $db->GetAll();
@@ -27,6 +27,12 @@ class Statistics{
             }
         }
         return json_encode($all);
+    }
+    public static function GetAll(){
+        $db = new Model();
+        $db->prepare("SELECT * FROM Visitors ORDER BY VisitDate DESC");
+        $result = $db->GetAll();
+        return json_encode($result);
     }
     public static function getAllFromPage($page){
         $db = new Model();
@@ -75,5 +81,26 @@ class Statistics{
         $db->prepare("SELECT * FROM Visitors WHERE Uniek=1");
         $result = $db->GetAll();
         return count($result);
+    }
+    public static function BestDay(){
+        $items = json_decode(Statistics::getAllSortByDate() , true);
+        $best = null;
+        foreach($items as $item){
+            if($best == null){
+                $best = $item;
+            }else{
+                if(count($item) >= count($best)){
+                    $best = $item;
+                }
+            }
+        }
+        if(count($best) > 0){
+            $date = $best[0]['VisitDate'];
+            $date = explode(' ', $date);
+            $c = count($best);
+            echo $date[0]." with $c visitors";
+        }else{
+            echo "None";
+        }
     }
 }

@@ -20,7 +20,7 @@
                 $result = $db->GetAll();
                 foreach($result as $item):
                 ?>
-                <tr>
+                <tr style="cursor: default;">
                   <?php foreach($item as $value):?>
                     <td><?php echo $value ?></td>
                   <?php endforeach;?>
