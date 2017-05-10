@@ -5,7 +5,6 @@ class Statistics{
         $db = new Model();
         $db->prepare("SELECT * FROM Visitors");
         $result = $db->GetAll();
-
         $olddate = Null;
         $dayarr = [];
         $all = [];

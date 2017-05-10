@@ -51,6 +51,18 @@ $db->fetch();
 $result = $db->GetAll();
 // debug query
 $db->debug();
+//get all tables
+$db->getTables();
+//get all column from table
+$db->getColumns($tablename);
+// create a new item in database
+// parameters
+// table, array with as keyname the column name
+$db->insert('users',['username'=>'test123','password'='password132']);
+// update item in database
+// parameters
+// table,primary key, array with as keyname the column name
+$db->update('users',1,['username'=>'test','password'='qwerty']);
 ?>
 ```
 ## User function
