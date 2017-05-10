@@ -39,6 +39,9 @@ class model{
     public function debug(){
         $this->stmt->debugDumpParams();
     }
+    /**
+        Get all tables
+    **/
     public function getTables(){
         $this->prepare("SHOW TABLES");
         $tables = $this->GetAll();
@@ -47,10 +50,19 @@ class model{
         $tables = $tables[$key]; 
         return $tables;
     }
+    /**
+        Get All column info from given table
+    **/
     public function getColumns($table){
         $this->prepare("SHOW COLUMNS FROM $table");
         return $this->GetAll(); 
     }
+    /**
+        Insert row in given table
+        $table is table to insert in
+        $items is array with as keyname the columnname like this $array = ['username'=>'Thisisaexample','password'=>'qwerty']
+        return an array with as first item the id of the row and second item is if the query is succeed
+    **/
     public function insert($table, $items){
         $tables = $this->getTables();
         if(!in_array($table,$tables)){
@@ -98,6 +110,12 @@ class model{
         $ar = ["id"=>$id,"succeed"=>$exe];
         return $ar;
     }
+    /**
+        Updates given table 
+        $table is table to update
+        $pk is primary key value of the item you want to update
+        $newValue is array with as keyname the columnname like this $array = ['username'=>'Thisisaexample','password'=>'qwerty']
+    **/
     public function update($table,$pk,$newValue){
         $tables = $this->getTables();
         if(!in_array($table,$tables)){

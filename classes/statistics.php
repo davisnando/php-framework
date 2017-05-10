@@ -3,8 +3,9 @@
 class Statistics{
     public static function getAllSortByDate(){
         $db = new Model();
-        $db->prepare("SELECT * FROM Visitors ");
+        $db->prepare("SELECT * FROM Visitors");
         $result = $db->GetAll();
+
         $olddate = Null;
         $dayarr = [];
         $all = [];
@@ -26,6 +27,7 @@ class Statistics{
                 }
             }
         }
+        array_push($all,$dayarr);
         return json_encode($all);
     }
     public static function GetAll(){
@@ -72,7 +74,7 @@ class Statistics{
     }
     public static function countAllVisitorsTodayOnly(){
         $db = new Model();
-        $db->prepare("SELECT * FROM Visitors WHERE VisitDate > (NOW() - INTERVAL 1 DAY)");
+        $db->prepare("SELECT * FROM Visitors WHERE Date(VisitDate) > (NOW() - INTERVAL 1 DAY)");
         $result = $db->GetAll();
         return count($result);
     }
