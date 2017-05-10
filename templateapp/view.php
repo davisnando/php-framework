@@ -2,5 +2,4 @@
 function index(){
     echo "Hello, World!";
 }
-
 ?>
