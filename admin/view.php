@@ -326,5 +326,4 @@ function statistics(){
     GetTemplate('dashboard','statistics.php');
     GetTemplate('main','footer.php');
 }
-
 ?>

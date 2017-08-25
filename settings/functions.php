@@ -6,11 +6,42 @@ $static = array();
 **/
 function LoadStatic(){
     $dirs = glob('*', GLOB_ONLYDIR);
-    $static = [];
     for($i = 0; $i < count($dirs); $i++){
         $dir = $dirs[$i];
         searchdir($dir."/static");
     }
+    global $static;    
+    $static['uploads'] = 'uploads';
+    
+}
+function CheckForDownloads(){
+    $oldpath = $_GET['path'];
+    $items = explode('/',$oldpath);
+    if(count($items) > 1){
+        $db = new Model();
+        $db->prepare("SELECT * FROM Downloads where DownloadHex=:hex");
+        $db->bind(":hex", $items[1]);
+        $result = $db->GetAll();
+        if(count($result) > 0){
+            return True;
+        }else{
+            return False;
+        }
+    }else{
+        return False;
+    }
+}
+function GetDownloads(){
+    $oldpath = $_GET['path'];
+    $items = explode('/',$oldpath);
+    $db = new Model();
+    $db->prepare("SELECT * FROM Downloads where DownloadHex=:hex");
+    $db->bind(":hex", $items[1]);
+    $result = $db->GetAll();
+    $type = getFileMimeType($result[0]['DownloadPATH']);
+    header('Content-Type: '.$type);
+    header('Content-Disposition: attachment; filename='.$result[0]['DownloadPATH']);
+    require($result[0]['DownloadPATH']);
 }
 /**
     Search every folder for a static folder
@@ -104,6 +135,8 @@ function getFileMimeType($file) {
     $icons = ['ico'];
     $stylesheets = ['css'];
     $javascript = ['js'];
+    $zip = ['zip'];
+    $docx = ['docx'];
     $array = explode('.',$file);
     $extension = end($array);
     if(in_array($extension,$images)){
@@ -114,6 +147,10 @@ function getFileMimeType($file) {
         return "application/javascript";
     }else if(in_array($extension,$icons)){
         return "image/x-icon";
+    }else if(in_array($extension,$zip)){
+        return "application/zip";
+    }else if(in_array($extension,$docx)){
+        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     }
     return "";
 }
@@ -304,4 +341,90 @@ function get_client_ip() {
     else
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
+}
+/**
+    Debug in javascript debugger
+**/
+function console_log( $data ){
+  echo '<script>';
+  echo 'console.log('. json_encode( $data ) .')';
+  echo '</script>';
+}
+
+
+function UploadImage($file){
+    $whitelist_Ext = array('jpeg','jpg','png','gif');
+    //Set default file type whitelist
+    $whitelist_Type = array('image/jpeg', 'image/jpg', 'image/png','image/gif');
+    $filename = $file['name'];
+    $fileType = $file['type'];
+    $file_parts = pathinfo($filename);
+    $ext = $file_parts['extension'];
+    if(!in_array(strtolower($fileType),$whitelist_Type) ){
+       return False;
+    }
+    if(!in_array(strtolower($ext),$whitelist_Ext)){
+        return False;
+    }
+    $result = upload($file,$whitelist_Ext,$whitelist_Type);
+    $mime =  mime_content_type($result);
+    if($mime == 'image/png'){
+        $im = imagecreatefrompng($result);
+        $name = str_replace('.png',"",$result);
+        imagejpeg($im,$name.'-min.jpeg',75);
+        $return = ['compress'=>$name.'-min.jpeg','original'=>$result];
+    }else if($mime == 'image/jpg'){
+        $im = imagecreatefromjpg($result);
+        $name = str_replace('-min.jpg',"",$result);
+        imagejpeg($im,$name.'-min.jpeg',75);
+        $return = ['compress'=>$name.'-min.jpeg','original'=>$result];
+    }else if($mime == 'image/gif'){
+        $im = imagecreatefromgif($result);
+        $name = str_replace('.gif',"",$result);
+        imagejpeg($im,$name.'-min.jpeg',75);
+        $return = ['compress'=>$name.'-min.jpeg','original'=>$result];
+    }else if($mime == 'image/jpeg'){
+        $im = imagecreatefromjpeg($result);
+        $name = str_replace('.jpeg',"",$result);
+        imagejpeg($im,$name.'-min.jpeg',75);
+        $return = ['compress'=>$name.'-min.jpeg','original'=>$result];
+    }else if($mime == 'image/jpg'){
+        $im = imagecreatefromjpg($result);
+        $name = str_replace('.jpg',"",$result);
+        imagejpeg($im,$name.'-min.jpeg',75);
+        $return = ['compress'=>$name.'-min.jpeg','original'=>$result];
+    }
+    return $return;
+}
+function ReturnImage($path){
+    $mime =  mime_content_type($path);
+    $im = null;
+    $whitelist_Type = array('image/jpeg', 'image/jpg', 'image/png','image/gif');
+    if(!in_array(strtolower($mime),$whitelist_Type) ){
+       return False;
+    }
+    $im = null;
+    if($mime == 'image/png'){
+        $im = imagecreatefrompng($path);
+    }else if($mime == 'image/jpg'){
+        $im = imagecreatefromjpg($path);
+    }else if($mime == 'image/gif'){
+        $im = imagecreatefromgif($path);
+    }else if($mime == 'image/jpeg'){
+        $im = imagecreatefromjpeg($path);
+    }else if($mime == 'image/jpg'){
+        $im = imagecreatefromjpg($path);
+    }
+    header('Content-Type: '.$mime);    
+    imagepng($im);
+    imagedestroy($im);
+    die();
+}
+function returnFile($path){
+    ReturnImage($path);
+    $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+    $result = finfo_file($finfo, $path);
+    header('Content-Type: '.$result);    
+    require($path);       
+    die();
 }

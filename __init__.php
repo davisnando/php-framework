@@ -8,89 +8,74 @@ if(strtolower(DEBUG) == "true"){
     error_reporting(E_ALL);
 }
 require_once("settings/functions.php");
-$var = $_GET['path'];
-RunFunc("settings/urls.php", $var);
-visit();
-function RunFunc($urlfile,$path,$oldpath=null){
+$var = "^".$_GET['path'];
+Run("settings/urls.php", $var);
+function Run($urlfile, $LocationUrl,$oldpath = null){
     require($urlfile);
-    if($path != ""){
-        if(substr($path, -1) == "/"){
-            $path = str_replace("/","",$path);
+    if($LocationUrl != ""){
+        if(substr($LocationUrl, -1) == "/"){
+            $LocationUrl = str_replace("/","",$LocationUrl);
         }
     }
-    $path1 = explode('/',$path);
-    if(array_key_exists($path,$url)){
-        $func = $url[$path];
-        if(preg_match('/urls.php/',$func)){
-            if($oldpath == null){
-                $path1 = explode('/',$path);
-                if(count($path1) > 1){
-                    $path = str_replace($path1[0]. '/',"",$path);
-                }else{
-                    $path = "";
-                }
-            }else{
-                $path1 = explode('/',$oldpath);
-                if(count($path1) > 1){
-                    $path = str_replace($path1[0]. '/',"",$path);
-                }else{
-                    $path = "";
-                }
-            }
-            RunFunc($func,$path);
-            return;
+    
+    $path1 = explode('/',$LocationUrl);
+    if(array_key_exists($LocationUrl,$url)){
+        CheckForUrls($url[$LocationUrl],$LocationUrl);
+    }else if(array_key_exists($LocationUrl."$",$url)){
+        CheckForUrls($url[$LocationUrl."$"],$LocationUrl);
+    }
+    for($i = count($path1) - 1 ; $i >= 0; $i--){
+        $key = GetKeyName($path1, $i);
+        if(array_key_exists($key,$url)){
+            CheckForUrls($url[$key],$key ,$LocationUrl);
         }
-        $func();
-    }else if(array_key_exists($path1[0],$url)){
-        $func = $url[$path1[0]];
-        if(preg_match('/urls.php/',$func)){
-            if($oldpath == null){
-                $path1 = explode('/',$path);
-                if(count($path1) > 1){
-                    $path = str_replace($path1[0]. '/',"",$path);
-                }else{
-                    $path = "";
-                }
-            }else{
-                $path1 = explode('/',$oldpath);
-                if(count($path1) > 1){
-                    $path = str_replace($path1[0]. '/',"",$path);
-                }else{
-                    $path = "";
-                }
-            }
-            RunFunc($func,$path);
-            return;
-        }
-        $func();
-    }else{
-        $oldpath = $path;
-        $path1 = explode('/',$path);
-        $keyname = $path1[0].'$';
-        if(array_key_exists($keyname,$url)){
-            RunFunc($urlfile,$keyname,$oldpath);
-            return;
-        }else{
-            try{
-                $oldpath = $_GET['path'];
-                $items = explode('/',$oldpath);
-                LoadStatic();
-                global $static;
-                $item = $items[0];
-                if(array_key_exists($item,$static)){
-                    $type = getFileMimeType($oldpath);
-                    header('Content-Type: '.$type);
-                    require($static[$items[0]].'/'.$items[1]);
-                }else{
-                    http_response_code(404);
-                    die();
-                }
-            }catch(Exception $ex){
-                    http_response_code(404);
-                    die();
-            }
-        }
+    }  
+    RunForStatic();
+    if(CheckForDownloads()){
+        GetDownloads();
+        die();
     }
 }
-
+function GetKeyName($pathar, $index){
+    $var = count($pathar) - 1 - $index;
+    $newKeyname = "";
+    for($i = 0; $i < count($pathar) - $var; $i++){
+        if($i == 0){
+            $newKeyname = $pathar[$i];
+        }else{
+            $newKeyname = $newKeyname.'/'.$pathar[$i];   
+        }
+    }
+    return $newKeyname;
+}
+function CheckForUrls($incomming,$keyname,$LocationUrl = null){
+    if(preg_match('/urls.php/',$incomming)){
+        if($LocationUrl == null){
+            Run($incomming,$_GET['path']);            
+        }else{
+            $path1 = explode('/',$LocationUrl);
+            if(count($path1) > 1){            
+                $newpath = str_replace($keyname."/","",$LocationUrl);
+            }else{
+                $newpath = str_replace($keyname,"",$LocationUrl);
+                
+            }
+            Run($incomming,$newpath,$LocationUrl);                        
+        }
+    }else{
+        visit();                
+        $incomming();
+        die();
+    }
+}
+function RunForStatic(){
+    LoadStatic();
+    global $static;
+    $FullPath = $_GET['path'];
+    $items = explode('/',$FullPath);
+    $item = $items[0];
+    if(array_key_exists($item,$static)){    
+        returnFile($static[$items[0]].'/'.$items[1]);
+    }
+}
 ?>
