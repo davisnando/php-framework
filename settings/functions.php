@@ -14,35 +14,6 @@ function LoadStatic(){
     $static['uploads'] = 'uploads';
     
 }
-function CheckForDownloads(){
-    $oldpath = $_GET['path'];
-    $items = explode('/',$oldpath);
-    if(count($items) > 1){
-        $db = new Model();
-        $db->prepare("SELECT * FROM Downloads where DownloadHex=:hex");
-        $db->bind(":hex", $items[1]);
-        $result = $db->GetAll();
-        if(count($result) > 0){
-            return True;
-        }else{
-            return False;
-        }
-    }else{
-        return False;
-    }
-}
-function GetDownloads(){
-    $oldpath = $_GET['path'];
-    $items = explode('/',$oldpath);
-    $db = new Model();
-    $db->prepare("SELECT * FROM Downloads where DownloadHex=:hex");
-    $db->bind(":hex", $items[1]);
-    $result = $db->GetAll();
-    $type = getFileMimeType($result[0]['DownloadPATH']);
-    header('Content-Type: '.$type);
-    header('Content-Disposition: attachment; filename='.$result[0]['DownloadPATH']);
-    require($result[0]['DownloadPATH']);
-}
 /**
     Search every folder for a static folder
 **/

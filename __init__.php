@@ -31,10 +31,7 @@ function Run($urlfile, $LocationUrl,$oldpath = null){
         }
     }  
     RunForStatic();
-    if(CheckForDownloads()){
-        GetDownloads();
-        die();
-    }
+    
 }
 function GetKeyName($pathar, $index){
     $var = count($pathar) - 1 - $index;
