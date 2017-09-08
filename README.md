@@ -11,7 +11,11 @@ You make apps and you connect it together with the urls.php. You can add your fu
 then I search further in that url file to get the functions to load the page.
 Every app can have a static folder and a template folder for his stylesheet and his views
 you can load your static files with this command:```LoadStatic()```. then can you search your file like this ``` GetStaticFile('subfolder','filename')``` . If you want to load templates then you need to use this command: 
-``` LoadTemplates()```. Then you can load your file like this: ```GetTemplate(sub folder,filename)``` it also can used as this: ```GetTemplate('filename')``` if you dont use subfolders
+``` LoadTemplates()```. Then you can load your file like this: ```GetTemplate(sub folder,filename)``` it also can used as this: ```GetTemplate('filename')``` if you dont use subfolders.
+
+#testing
+
+if you want to test your website your can type this in your terminal: ``` php -S localhost:8000 manage.php ```. it wil run a webserver on url ``` localhost:8000 ```
 
 # admin page
 You can go to the admin page by typing this in your webbrowser http://yourwebsite.com/admin. There you can add/edit users, change rows in almost every table, change roles and permission, show a log of all admin changes and show statistics of your webpage
@@ -76,14 +80,14 @@ In the model folder of your app you have a file named ```model.php``` in that fi
         }
     }
 ``` 
-When you are done making your model you can migrate it by typing this in your terminal ``` php migrate.php ```
+When you are done making your model you can migrate it by typing this in your terminal ``` php manage.php migrate ```
 to insert data in your database after you maked your app add a this to your model class:
 ```php
 function insert(){
     <MODELNAME>::Create([COLUMNNAME=>VALUE]);
 }
 ```
-Then you can run ```php insertData.php``` to insert all of your data
+Then you can run ```php manage.php insertData``` to insert all of your data
 
 To use your model you can do this:
 
