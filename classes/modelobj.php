@@ -47,7 +47,14 @@ class ModelObj{
         }      
         return "";  
     }
-
+    static function get_or_create($options){
+        $classname = get_called_class(); 
+        $c = $classname::Get($options);  
+        if($c != null)
+            return $c;
+        else
+            return $classname::Create($options);      
+    }
     static function Get($options){
         $db = new Model();
         $classname = get_called_class(); 
@@ -163,8 +170,8 @@ class ModelVarchar extends ModelObjBase{
         $this->value = NULL;
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." VARCHAR(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` VARCHAR(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -176,8 +183,8 @@ class ModelVarchar extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." VARCHAR(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` VARCHAR(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -202,8 +209,8 @@ class ModelInt extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." INT(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` INT(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -215,11 +222,12 @@ class ModelInt extends ModelObjBase{
         if($this->autoincrement){
             $query .= "AUTO_INCREMENT";
         }
+        echo $query;
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." INT(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` INT(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -245,8 +253,8 @@ class ModelFloat extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." float";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` float";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -258,8 +266,8 @@ class ModelFloat extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." float";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` float";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -283,8 +291,8 @@ class ModelBool extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." tinyint(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` tinyint(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -296,8 +304,8 @@ class ModelBool extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." tinyint(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` tinyint(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -320,8 +328,8 @@ class ModelText extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." TEXT";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` TEXT";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -333,8 +341,8 @@ class ModelText extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." TEXT";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` TEXT";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -361,25 +369,25 @@ class ModelFK extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." INT(".$this->length.") UNSIGNED";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` INT(".$this->length.") UNSIGNED";
         if($this->can_be_null){
             $query .= " NULL";
         }else{
             $query .= " NOT NULL";
         }
-        $query .= "; ALTER TABLE $table ADD CONSTRAINT $this->indexName FOREIGN KEY ($this->name) REFERENCES ".$this->object::name()." (id)";
+        $query .= "; ALTER TABLE `$table` ADD CONSTRAINT $this->indexName FOREIGN KEY (`$this->name`) REFERENCES `".$this->object::name()."` (id)";
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." INT(".$this->length.") UNSIGNED";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` INT(".$this->length.") UNSIGNED";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
             $query .= " NOT NULL ";
         }
-        $query .= "; ALTER TABLE $table ADD CONSTRAINT $this->indexName FOREIGN KEY ($this->name) REFERENCES ".$this->object::name()." (id)";        
+        $query .= "; ALTER TABLE `$table` ADD CONSTRAINT $this->indexName FOREIGN KEY (`$this->name`) REFERENCES `".$this->object::name()."` (id)";        
         return $query."; ";
     }
     function getObject(){
@@ -403,8 +411,8 @@ class ModelDateTime extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." datetime";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` datetime";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -416,8 +424,8 @@ class ModelDateTime extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." datetime";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` datetime";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -440,7 +448,7 @@ class ModelTime extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
+        $query = "ALTER TABLE `".$table."` ADD ";
         $query .= $this->name." time";
         if($this->can_be_null){
             $query .= " NULL ";
@@ -453,8 +461,8 @@ class ModelTime extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." time";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` time";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -477,8 +485,8 @@ class ModelDate extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." date";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` date";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -487,8 +495,8 @@ class ModelDate extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." date";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` date";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -508,8 +516,8 @@ class ModelDouble extends ModelObjBase{
         
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." double";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` double";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -521,8 +529,8 @@ class ModelDouble extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." double";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` double";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -549,8 +557,8 @@ class ModelDecimal extends ModelObjBase{
         $this->value = NULL;        
     }
     function GetQuery($table){
-        $query = "ALTER TABLE ".$table." ADD ";
-        $query .= $this->name." decimal(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` ADD `";
+        $query .= $this->name."` decimal(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -562,8 +570,8 @@ class ModelDecimal extends ModelObjBase{
         return $query."; ";
     }
     function ChangeQuery($table){
-        $query = "ALTER TABLE ".$table." CHANGE COLUMN ".$this->name." ";
-        $query .= $this->name." decimal(".$this->length.")";
+        $query = "ALTER TABLE `".$table."` CHANGE COLUMN `".$this->name."` `";
+        $query .= $this->name."` decimal(".$this->length.")";
         if($this->can_be_null){
             $query .= " NULL ";
         }else{
@@ -575,6 +583,7 @@ class ModelDecimal extends ModelObjBase{
         return $query."; ";
     }
 }
+
 
 
 
