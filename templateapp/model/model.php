@@ -1,4 +1,4 @@
-<?php
+ <?php
 
     // class testclass extends ModelObj{
     //     function __construct(){
@@ -18,8 +18,8 @@
     //         $this->decimal = new ModelDecimal('decima',11,NULL, False,False);
     //         $this->sd = new ModelFloat('fl',NULL, False);
     //         $this->ds = new ModelDouble('dbl',NULL, False);
-    //         $this->int2 = new ModelBool('test',NULL, False,False);
-    //         $this->int3 = new ModelFK('textfield','fk_textfield',testclass::Class, False,False);
+    //         $this->int2 = new ModelBool('test',NULL, False);
+    //         $this->int3 = new ModelFK('textfield','fk_textfield',testclass::Class, False);
     //     }
     // }
     
