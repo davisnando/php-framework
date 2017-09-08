@@ -97,7 +97,7 @@ class User{
         }
         $db->execute();
         $id = $db->dbh->lastInsertId();
-        $query1 = "INSERT INTO Users($userquery1,idPersonal) VALUES($binduser,:id)";
+        $query1 = "INSERT INTO Users($userquery1,Personal) VALUES($binduser,:id)";
         $db->prepare($query1);
         foreach($uservalue as $bindvalue){
             $db->bind($bindvalue[0],$bindvalue[1]);
@@ -105,7 +105,7 @@ class User{
         $db->bind(":id",$id);
         $db->execute();
         $id = $db->dbh->lastInsertId();
-        $db->prepare("INSERT INTO userRole(idUser,idRole) VALUES(:user,2)");
+        $db->prepare("INSERT INTO userRole(user,role) VALUES(:user,2)");
         $db->bind(":user",$id);
         $db->execute();
         echo "Done";
@@ -117,15 +117,15 @@ class User{
     **/
     public static function RoleExist($username,$perm){
         $db = new model(DB_Database);
-        $db->prepare("SELECT Role.idRole,Role.name FROM `Users` JOIN userRole ON Users.idUsers=userRole.idUser JOIN Role ON userRole.idRole=Role.idRole WHERE Users.username=:user");
+        $db->prepare("SELECT Role.id,Role.Name FROM `Users` JOIN userRole ON Users.id=userRole.user JOIN Role ON userRole.role=Role.id WHERE Users.username=:user");
         $db->bind(":user",$username);
         $result = $db->GetAll();
         foreach($result as $item){
-            if($item['name'] == $perm){
+            if($item['Name'] == $perm){
                 return True;
             }
-            $db->prepare("SELECT Perm.description FROM `permRole` JOIN Perm ON Perm.idPerm=permRole.idPerm WHERE `idRole`=:id");
-            $db->bind(":id",$item['idRole']);
+            $db->prepare("SELECT Perm.description FROM `permRole` JOIN Perm ON Perm.id=permRole.perm WHERE `role`=:id");
+            $db->bind(":id",$item['id']);
             $result1 = $db->GetAll();
             foreach($result1 as $item1){
                 if(in_array($perm,$item1) )
@@ -140,10 +140,10 @@ class User{
     }
     public static function getId($username){
         $db = new Model();
-        $db->prepare("SELECT idUsers FROM Users WHERE username=:id");
+        $db->prepare("SELECT id FROM Users WHERE username=:id");
         $db->bind(":id",$username);
         $result = $db->getAll();
-        return $result[0]['idUsers'];
+        return $result[0]['id'];
     }
 
 }

@@ -9,6 +9,7 @@ function index(){
     GetTemplate('main','header.php');
     GetTemplate('sign_in','index.php');
     GetTemplate('main','footer.php');
+    die();
 }
 function login(){
     $user = strtolower( $_POST['user']);
@@ -71,10 +72,10 @@ function ChangeUser(){
     $db = new model();
     $id = $_SESSION['ChangeID'];
     $i = 0;
-    $db->prepare("SELECT * FROM `Users` JOIN Personal ON Users.idPersonal = Personal.idPersonal WHERE `idUsers`=:id");
+    $db->prepare("SELECT Users.username,Users.email,Users.Personal,Personal.* FROM `Users` JOIN Personal ON Users.Personal = Personal.id WHERE Users.`id`=1");
     $db->bind(":id",$id);
     $items = $db->GetAll();
-    $pid = $items[0]['idPersonal'];
+    $pid = $items[0]['id'];
     $whitelist = array_keys($items[0]);
     $keynames = array_keys($_POST);
     foreach($_POST as $table){
@@ -82,15 +83,15 @@ function ChangeUser(){
         if(!in_array($key,$whitelist)){
             die();
         }
-        if($keynames[$i] == "idUsers"){
+        if($keynames[$i] == "id"){
 
         }else if($keynames[$i] == "username" || $keynames[$i] == "email"){
-            $db->prepare("UPDATE Users SET $key=:value WHERE idUsers=:id");
+            $db->prepare("UPDATE Users SET $key=:value WHERE id=:id");
             $db->bind(":id",$id);
             $db->bind(":value",$table);
 
         }else{
-            $db->prepare("UPDATE Personal SET $key=:value WHERE idPersonal=:pid");
+            $db->prepare("UPDATE Personal SET $key=:value WHERE id=:pid");
             $db->bind(":pid",$pid);
             $db->bind(":value",$table);
         }
@@ -100,7 +101,6 @@ function ChangeUser(){
         $i++;
     }
     AddLog("Changed user with id: $id");
-
     echo "Done";
 }
 function CreateUser(){
@@ -124,7 +124,7 @@ function Role(){
 function getPerm(){
     $id = $_POST['id'];
     $db = new Model();
-    $db->prepare("SELECT idPerm FROM permRole WHERE idRole=:id");
+    $db->prepare("SELECT perm FROM permRole WHERE role=:id");
     $db->bind(":id",$id);
     $result = $db->GetAll();
     echo json_encode($result);
@@ -139,7 +139,7 @@ function setPerm(){
     $db = new Model();
 
     if($toggle == "1"){
-        $db->prepare("INSERT INTO permRole(idRole,idPerm) VALUES(:role,:perm)");
+        $db->prepare("INSERT INTO permRole(role,perm) VALUES(:role,:perm)");
         $db->bind(":role", $id);
         $db->bind(":perm",$idPerm);
         $db->execute();
@@ -148,7 +148,7 @@ function setPerm(){
 
 
     }else{
-        $db->prepare("DELETE FROM permRole WHERE idRole=:role and idPerm=:perm");
+        $db->prepare("DELETE FROM permRole WHERE role=:role and perm=:perm");
         $db->bind(":role", $id);
         $db->bind(":perm",$idPerm);
         $db->execute();
@@ -163,7 +163,7 @@ function changeRole(){
     $idRole = $_POST['idRole'];
     $idUser = $_POST['idUser'];
     $db = new Model();
-    $db->prepare("SELECT * FROM userRole WHERE idUser=:id and idRole=1");
+    $db->prepare("SELECT * FROM userRole WHERE user=:id and role=1");
     $db->bind(":id",$idUser);
     $result = $db->GetAll();
     if(count($result) > 0){
@@ -172,7 +172,7 @@ function changeRole(){
     $db->prepare("DELETE FROM userRole WHERE idUser=:id");
     $db->bind(":id",$idUser);
     $db->execute();
-    $db->prepare("INSERT INTO userRole(idRole, idUser) VALUES(:role,:id)");
+    $db->prepare("INSERT INTO userRole(role, user) VALUES(:role,:id)");
     $db->bind(":id",$idUser);
     $db->bind(":role",$idRole);
     $db->execute();  
@@ -186,14 +186,14 @@ function createRole(){
     }
     $name = $_POST['name'];
     $db = new Model();
-    $db->prepare("SELECT * FROM Role WHERE name=:name");
+    $db->prepare("SELECT * FROM Role WHERE Name=:name");
     $db->bind(":name",$name);
     $result = $db->GetAll();
     if(count($result) > 0){
         echo "Exist";
         die();
     }
-    $db->prepare("INSERT INTO Role(name) VALUES(:name)");
+    $db->prepare("INSERT INTO Role(Name) VALUES(:name)");
     $db->bind(":name",$name);
     $db->execute();
     AddLog("Created a new Role with name: ".$name);

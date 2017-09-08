@@ -20,7 +20,7 @@
               <tbody>
                 <?php
                   $db = new model();
-                  $db->prepare("SELECT Users.username,Users.email,Personal.firstname,Personal.lastname FROM Users JOIN Personal ON Users.idPersonal=Personal.idPersonal");
+                  $db->prepare("SELECT Users.username,Users.email,Personal.firstname,Personal.lastname FROM Users JOIN Personal ON Users.Personal=Personal.id");
                   $result = $db->GetAll();
                   $i = 1;
                 ?>

@@ -16,12 +16,12 @@
 
           <?php 
           $db = new Model();
-          $db->prepare("SELECT idRole,name from Role");
+          $db->prepare("SELECT id,Name from Role");
           $result = $db->GetAll();
           foreach($result as $column):
           ?>
 
-            <option value="<?php echo $column['idRole'] ?>"><?php echo $column['name'] ?></option>
+            <option value="<?php echo $column['id'] ?>"><?php echo $column['Name'] ?></option>
           <?php endforeach; ?>
           </select>
           <br>
@@ -32,7 +32,7 @@
             foreach($result as $column):
             ?>
             <div class="checkbox">
-           <label><input type="checkbox" class="permission" id="perm<?php echo $column['idPerm'];?>" value="<?php echo $column['idPerm']; ?>"> <?php echo $column['description']; ?></label>
+           <label><input type="checkbox" class="permission" id="perm<?php echo $column['id'];?>" value="<?php echo $column['id']; ?>"> <?php echo $column['description']; ?></label>
             </div>
 
             <?php endforeach; ?>
@@ -51,23 +51,23 @@
             <option value=""></option>
 
             <?php
-              $db->prepare("SELECT idUsers,username FROM Users JOIN userRole on userRole.idUser=Users.idUsers WHERE userRole.idRole <> 1");
+              $db->prepare("SELECT id,username FROM Users JOIN userRole on userRole.user=Users.id WHERE userRole.role <> 1");
               $result = $db->GetAll();
               foreach($result as $item):
             ?>
-            <option id="item<?php echo $item['idUsers']; ?>" value="<?php echo $item['idUsers']; ?>"><?php echo $item['username'];  ?></option>
+            <option id="item<?php echo $item['id']; ?>" value="<?php echo $item['id']; ?>"><?php echo $item['username'];  ?></option>
             <?php endforeach;?>
           </select>
           <label >Select Role:</label>
           <select id="RoleChange" class="form-control">
           <option value=""></option>
           <?php 
-          $db->prepare("SELECT idRole,name from Role");
+          $db->prepare("SELECT id,Name from Role");
           $result = $db->GetAll();
           foreach($result as $column):
           ?>
 
-            <option value="<?php echo $column['idRole'] ?>"><?php echo $column['name'] ?></option>
+            <option value="<?php echo $column['id'] ?>"><?php echo $column['Name'] ?></option>
           <?php endforeach; ?>
           </select>
           <input type="submit" class="form-control" value="Change">
@@ -90,7 +90,7 @@
               $("#boxes input:checkbox").prop('checked',false);
               for(var i =0; i < msg.length; i++){
                 var item = msg[i];
-                $("#boxes #perm" + item['idPerm']).prop('checked',true);
+                $("#boxes #perm" + item['perm']).prop('checked',true);
               }
         });
       }

@@ -6,7 +6,7 @@
           <h2>Change User</h2>
                 <?php
                   $db = new model();
-                  $db->prepare("SELECT Users.idUsers,Users.email,Users.username, Personal.* FROM Users JOIN Personal on Users.idPersonal=Personal.idPersonal WHERE Users.username=:user");
+                  $db->prepare("SELECT Users.id,Users.email,Users.username, Personal.* FROM Users JOIN Personal on Users.Personal=Personal.id WHERE Users.username=:user");
                   $items = explode('/',$_GET['path']);
                   $user = $items[count($items) - 1];
                   $db->bind(":user",$user);
@@ -27,11 +27,11 @@
                      $itemkey  = $allKeys[$i];
                      $i++;
                    ?>
-                   <?php if($itemkey != "idUsers" && $itemkey != "idPersonal" && $itemkey != "username"): ?>
+                   <?php if($itemkey != "id" && $itemkey != "Personal" && $itemkey != "username"): ?>
                      <input type="" class="form-control" name="<?php echo $itemkey ?>" value="<?php echo $item; ?>">
                      <br>
                    <?php endif;?>
-                   <?php if($itemkey == "idUsers"):?>
+                   <?php if($itemkey == "id"):?>
                      <?php $_SESSION['ChangeID'] = $item;?>
                    <?php endif;?>
                 <?php endforeach;?>
@@ -50,10 +50,11 @@
           data: GetData
         })
           .done(function( msg ) {
+            // console.log(msg);
               if(msg == "Done"){
                 alert("Saved");
               }else{
-                alert("something goes wrong!");
+                alert("something went wrong!");
               }
           });
         return false;

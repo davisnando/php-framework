@@ -2,6 +2,7 @@
 session_start();
 require_once("settings/config.php");
 require_once("classes/model.php");
+require_once("classes/modelobj.php");
 if(strtolower(DEBUG) == "true"){
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -31,7 +32,6 @@ function Run($urlfile, $LocationUrl,$oldpath = null){
         }
     }  
     RunForStatic();
-    
 }
 function GetKeyName($pathar, $index){
     $var = count($pathar) - 1 - $index;
@@ -54,13 +54,12 @@ function CheckForUrls($incomming,$keyname,$LocationUrl = null){
             if(count($path1) > 1){            
                 $newpath = str_replace($keyname."/","",$LocationUrl);
             }else{
-                $newpath = str_replace($keyname,"",$LocationUrl);
-                
+                $newpath = str_replace($keyname,"",$LocationUrl);   
             }
             Run($incomming,$newpath,$LocationUrl);                        
         }
     }else{
-        visit();                
+        visit();    
         $incomming();
         die();
     }
@@ -73,6 +72,9 @@ function RunForStatic(){
     $item = $items[0];
     if(array_key_exists($item,$static)){    
         returnFile($static[$items[0]].'/'.$items[1]);
+        die();
     }
+    
 }
+http_response_code(404);
 ?>

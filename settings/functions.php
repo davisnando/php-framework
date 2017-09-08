@@ -225,17 +225,17 @@ function AddLog($logtext){
 **/
 function stillAlive(){
     $db = new Model();
-    $db->prepare("DELETE FROM Vistors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
+    $db->prepare("DELETE FROM Visitors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
     $db->execute();
     $ip = get_client_ip();
-    $db->prepare("SELECT * FROM Vistors_online WHERE IP=:ip");
+    $db->prepare("SELECT * FROM Visitors_online WHERE IP=:ip");
     $db->bind(":ip", $ip);
     $result = $db->GetAll();
     $query = "";
     if(count($result) == 0){
-        $query = "INSERT INTO Vistors_online(IP) VALUES(:ip)";
+        $query = "INSERT INTO Visitors_online(IP) VALUES(:ip)";
     }else{
-        $query = "UPDATE `Vistors_online` SET `Last_seen`=CURRENT_TIMESTAMP WHERE `IP`=:ip";
+        $query = "UPDATE `Visitors_online` SET `Last_seen`=CURRENT_TIMESTAMP WHERE `IP`=:ip";
     }
     $db->prepare($query);
     $db->bind(":ip",$ip);
@@ -395,7 +395,12 @@ function returnFile($path){
     ReturnImage($path);
     $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
     $result = finfo_file($finfo, $path);
-    header('Content-Type: '.$result);    
+    header('Content-Type: '.$result);   
+    $exe = explode('.',$path);
+    if($exe[count($exe) - 1] == "css"){
+        header('Content-Type: text/css');   
+        
+    } 
     require($path);       
     die();
 }

@@ -65,7 +65,7 @@ class Statistics{
     }
     public static function countOnlineVisitors(){
         $db = new Model();
-        $db->prepare("DELETE FROM Vistors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
+        $db->prepare("DELETE FROM Visitors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
         $db->execute();
         $db->prepare("SELECT * FROM Vistors_online");
         $result = $db->GetAll();

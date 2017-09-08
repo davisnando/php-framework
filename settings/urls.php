@@ -1,8 +1,8 @@
 <?php
 $url = [
-    ""=>"templateapp/urls.php",
-    "admin"=>"admin/urls.php",
-    "stillAlive"=>"stillAlive"
+    "^"=>"templateapp/urls.php",
+    "^admin"=>"admin/urls.php",
+    "^stillAlive"=>"stillAlive"
 ];
 
 ?>
