@@ -23,14 +23,14 @@ class ModelObj{
         foreach($vars as $var){
             if(!$var->can_be_null){
                 if(!in_array($var->name, $names) ){
-                    trigger_error("$var->name can't be null", E_USER_ERROR);  
+                    throw new execption("$var->name can't be null", E_USER_ERROR);  
                 }
             }
         }
         $db = new Model();
         $result = $db->insert($classname, $options);
         if($result['succeed'] != True){
-            trigger_error("Something went wrong by create row in table: $table", E_USER_ERROR);  
+            throw new execption("Something went wrong by create row in table: $table", E_USER_ERROR);  
         }
         return $classname::Get(['id'=>$result['id']]);
     }
@@ -111,7 +111,7 @@ class ModelObj{
         $classname = get_called_class();
         $succeed = $db->update($classname, $id, $options);
         if(!$succeed){
-            trigger_error("Something went wrong when updating: $classname", E_USER_ERROR);            
+            throw new execption("Something went wrong when updating: $classname", E_USER_ERROR);            
         }
         $this->__updateValues();
         return $this;
