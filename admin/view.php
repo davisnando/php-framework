@@ -1,5 +1,5 @@
 <?php
-require("classes/user.php");
+require_once("classes/user.php");
 function index(){
      if(isset($_SESSION['username']) && User::RoleExist($_SESSION['username'],"adminpanel")){
         header("location: /admin/dashboard");

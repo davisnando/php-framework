@@ -1,6 +1,8 @@
 <?php
 $templates = array();
 $static = array();
+require_once('classes/user.php');
+
 /**
     load static files in
 **/
@@ -215,7 +217,7 @@ function upload($file,$whitelist_Ext,$whitelist_Type){
 **/
 function AddLog($logtext){
     $db = new Model();
-    $db->prepare("INSERT INTO Log(idUser,Logtext) VALUES(:id,:text)");
+    $db->prepare("INSERT INTO Log(user,Logtext) VALUES(:id,:text)");
     $db->bind(":id",User::getId($_SESSION['username']));
     $db->bind(":text",$logtext);
     $db->execute();
@@ -223,23 +225,42 @@ function AddLog($logtext){
 /**
     Let you stay online in the statistic panel
 **/
+/**
+    Let you stay online in the statistic panel
+**/
 function stillAlive(){
+    $ip = get_client_ip();    
     $db = new Model();
+    $db->prepare("SELECT * FROM Visitors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
+    $result = $db->GetAll();
+    foreach($result as $item){
+        $db->prepare("SELECT * FROM Visitors WHERE IP=:ip and page=:page ORDER BY VisitDate DESC");
+        $db->bind(":ip", $ip);
+        $db->bind(":page",$item['Page']);
+        $db->execute();
+        $vitem = $db->fetch();
+        $db->prepare('UPDATE Visitors SET `onlinesince`=:os WHERE id=:id');
+        $db->bind(':os',$item['Last_seen']);
+        $db->bind(':id',$vitem['id']);
+        $db->execute();
+    }
     $db->prepare("DELETE FROM Visitors_online WHERE Last_seen < (NOW() - INTERVAL 1 MINUTE)");
     $db->execute();
-    $ip = get_client_ip();
-    $db->prepare("SELECT * FROM Visitors_online WHERE IP=:ip");
+    $db->prepare("SELECT * FROM Visitors_online WHERE IP=:ip and Page=:p");
+    $db->bind(":p", $_SESSION['path']);
     $db->bind(":ip", $ip);
     $result = $db->GetAll();
-    $query = "";
+    $localIP = getHostByName(getHostName());        
     if(count($result) == 0){
-        $query = "INSERT INTO Visitors_online(IP) VALUES(:ip)";
+        Visitors_online::Create(['IP'=>$ip,'localip'=>$localIP, 'Page'=>$_SESSION['path']]);
     }else{
-        $query = "UPDATE `Visitors_online` SET `Last_seen`=CURRENT_TIMESTAMP WHERE `IP`=:ip";
+        $query = "UPDATE `Visitors_online` SET `Last_seen`=CURRENT_TIMESTAMP WHERE `IP`=:ip and `localip`=:lip and Page=:p";
+        $db->prepare($query);
+        $db->bind(":p", $_SESSION['path']);        
+        $db->bind(":ip",$ip);
+        $db->bind(":lip",$localIP);
+        $db->execute();
     }
-    $db->prepare($query);
-    $db->bind(":ip",$ip);
-    $db->execute();
 }
 /**
     Add alive control javascript to your page
@@ -255,7 +276,6 @@ function addAliveControl(){
 **/
 function visit(){
     $path = $_GET['path'];
-    $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $db = new Model();
     $ip =  get_client_ip();
     $db->prepare("SELECT * FROM `Visitors` WHERE `VisitDate` > (NOW() - INTERVAL 1 MINUTE) AND IP=:ip AND Page=:p");
@@ -277,6 +297,7 @@ function visit(){
     if(count($result) >= 1){
         return;
     }
+    $_SESSION['path'] = $_GET['path'];
     stillAlive();
     $unique = True;
     if(isset($_COOKIE['Unique'])){
@@ -284,13 +305,7 @@ function visit(){
     }else{
         setcookie("Unique","False",time() + (10 * 365 * 24 * 60 * 60));
     }
-    $db->prepare("INSERT INTO Visitors(Uniek,Page,IP) VALUES(:u,:p,:i)");
-    $db->bind(":u",$unique);
-    $db->bind(":p",$path);
-    $db->bind(":i",$ip);
-    $db->execute();
-
-    
+    Visitors::Create(['Uniek'=>$unique, 'Page'=>$path, 'IP'=>$ip]);
 }
 /**
     Returns the ip of the client

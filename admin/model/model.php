@@ -11,6 +11,8 @@ class Visitors extends ModelObj{
 class Visitors_online extends ModelObj{
     function __construct(){
         $this->IP = new ModelVarchar('IP',255,NULL,False);
+        $this->LocalIP = new ModelVarchar('LocalIP',255,NULL,True);
+        $this->visitedpage = new ModelVarchar('visitedpage',255,NULL,True);
         $this->Last_seen = new ModelDateTime('Last_seen',True,True);
     }
 }
