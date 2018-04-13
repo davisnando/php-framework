@@ -1,5 +1,4 @@
 <?php
-
 Abstract Class View{
     public function __construct(){
         if(method_exists($this, 'get_context_data')){
@@ -15,6 +14,7 @@ Abstract Class View{
             }
     }
     static function as_view(){
-        $view = View();
+        $classname = get_called_class();
+        $view = new $classname;
     }
 }

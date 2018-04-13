@@ -12,7 +12,7 @@ require_once("settings/functions.php");
 $var = "^".$_GET['path'];
 Run("settings/urls.php", $var);
 function Run($urlfile, $LocationUrl,$oldpath = null){
-    require($urlfile);
+    include($urlfile);
     if($LocationUrl != ""){
         if(substr($LocationUrl, -1) == "/"){
             $LocationUrl = str_replace("/","",$LocationUrl);
@@ -59,7 +59,7 @@ function CheckForUrls($incomming,$keyname,$LocationUrl = null){
             Run($incomming,$newpath,$LocationUrl);                        
         }
     }else{
-        visit();    
+        visit();  
         $incomming();
         die();
     }
