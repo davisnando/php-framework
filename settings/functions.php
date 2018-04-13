@@ -252,9 +252,9 @@ function stillAlive(){
     $result = $db->GetAll();
     $localIP = getHostByName(getHostName());        
     if(count($result) == 0){
-        Visitors_online::Create(['IP'=>$ip,'localip'=>$localIP, 'Page'=>$_SESSION['path']]);
+        Visitors_online::Create(['IP'=>$ip,'LocalIP'=>$localIP, 'visitedpage'=>$_SESSION['path']]);
     }else{
-        $query = "UPDATE `Visitors_online` SET `Last_seen`=CURRENT_TIMESTAMP WHERE `IP`=:ip and `localip`=:lip and Page=:p";
+        $query = "UPDATE `Visitors_online` SET `Last_seen`=CURRENT_TIMESTAMP WHERE `IP`=:ip and `LocalIp`=:lip and `visitedpage`=:p";
         $db->prepare($query);
         $db->bind(":p", $_SESSION['path']);        
         $db->bind(":ip",$ip);
