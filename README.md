@@ -3,18 +3,18 @@ Django inspired framework in php
 
 # Get Started
 Copy the configtemplate.php in the settings folder and rename it to config.php.
-Copy the templateapp and rename it to whatever you want. Finaly you need to add a item to the array in settings/urls.php like this ```'^URL_HERE'=>'YOUR_APP/urls.php'```.
+Copy the templateapp and rename it to whatever you want. Finaly you need to add an item to the array in settings/urls.php like this ```'^URL_HERE'=>'YOUR_APP/urls.php'```.
 and you're done with setting everything up
 
 # How does it work
-You write all the knowledge in a app and you use the urls.py to connect everything. You need to add your view/function in the settings/urls.php. You can also add a urls.php in your app and add the path to the settings/urls.php
+You write all the knowledge in an app and you use the urls.py to connect everything. You need to add your view/function in the settings/urls.php. You can also add an urls.php in your app and add the path to the settings/urls.php
 then it will search further in that url file to get the functions to load the page.
 
 Every app can have a static folder and a template folder for his stylesheet and his views you create them by just creating a folder named templates or static.
 you can load your static files with this command:```LoadStatic()```. then can you search your file like this ``` GetStaticFile('subfolder','filename')``` . If you want to load templates then you need to use this command: 
 ``` LoadTemplates()```. Then you can import them like this: ```GetTemplate(sub folder,filename)``` it also can be used like this: ```GetTemplate('filename')``` if you don't use subfolders.
 
-#testing
+# testing
 
 if you want to test your website your can type this in your terminal: ``` php -S localhost:8000 manage.php ```. it wil run a webserver on url ``` localhost:8000 ```
 
