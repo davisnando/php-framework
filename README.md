@@ -82,7 +82,7 @@ In the model folder of your app you have a file named ```model.php``` in that fi
     }
 ``` 
 When you're done creating your model you can migrate it by typing this in your terminal ``` php manage.php migrate ```
-If you have default value in your model you can create a insert function inside your model to insert data afterwards:
+If you have default value in your model you can create an `insert` function inside your model to insert data afterwards:
 ```php
 function insert(){
     <MODELNAME>::Create([COLUMNNAME=>VALUE]);
@@ -111,7 +111,7 @@ $model = classtest::Set([COLUMN_NEED_TO_UPDATE=>NEW_VALUE]);
 ## User function
 ```php
 <?php
-// creates a user
+// creates an user
 // array keyname is column name value is value of column
 User::createUser($array);
 // Login function and creates a session when is successfull
@@ -123,7 +123,7 @@ User::RoleExist($username,$permissionname);
 ## Input function
 ```php
 <?php
-// Create a input. default is bootstrap on
+// Create an input. default is bootstrap on
 createInput(type,name/id,value/placeholder,['class'=>'classname','bootstrap'=>False,'props'=>"style='width='100%''"]);
 ?>
 ```
