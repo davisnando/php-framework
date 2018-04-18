@@ -14,16 +14,16 @@ Every app can have a static folder and a template folder for his stylesheet and 
 you can load your static files with this command:```LoadStatic()```. then can you search your file like this ``` GetStaticFile('subfolder','filename')``` . If you want to load templates then you need to use this command: 
 ``` LoadTemplates()```. Then you can import them like this: ```GetTemplate(sub folder,filename)``` it also can be used like this: ```GetTemplate('filename')``` if you don't use subfolders.
 
-# testing
+# Testing
 
 if you want to test your website your can type this in your terminal: ``` php -S localhost:8000 manage.php ```. it wil run a webserver on url ``` localhost:8000 ```
 
-# admin page
+# Admin page
 You can go to the admin page by typing this in your webbrowser http://yourwebsite.com/admin. There you can add/edit users, change rows in almost every table, change roles and permission, show a log of all admin changes and show statistics of your webpage
 
 # Functions
 
-## load templates
+## Load templates
 ```php
 <?php
 // load templates
@@ -33,7 +33,7 @@ GetTemplate(sub folder,filename)
 // or just the filename if you doesn't use subfolders
 GetTemplate('filename') ?>
 ```
-## load static files
+## Load static files
 ```php
 // load templates
 <?php LoadStatic();
@@ -120,14 +120,14 @@ User::Login($user,$pass);
 User::RoleExist($username,$permissionname);
 ?>
 ```
-## input function
+## Input function
 ```php
 <?php
 // Create a input. default is bootstrap on
 createInput(type,name/id,value/placeholder,['class'=>'classname','bootstrap'=>False,'props'=>"style='width='100%''"]);
 ?>
 ```
-## upload function
+## Upload function
 ```php
 <?php
 // upload a file in de uploads folder with a random name
